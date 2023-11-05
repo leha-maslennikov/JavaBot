@@ -6,15 +6,15 @@ public class Creature {
     protected String name;
     protected int hp;
     protected int ap;
-    protected Item[] bag;
-    protected Item[] equipment;
+    protected Box bag;
+    protected Box equipment;
 
     public Creature(String name){
         this.name = name;
         hp = 10;
         ap = 1;
-        bag = new Item[8];
-        equipment = new Item[5];
+        bag = new Box("bag");
+        equipment = new Box("equipment");
     }
 
     public String getName(){
@@ -26,6 +26,14 @@ public class Creature {
 
     public int getHp() {
         return hp;
+    }
+
+    public Box getBag() {
+        return bag;
+    }
+
+    public Box getEquipment() {
+        return equipment;
     }
 
     public SendMessage.SendMessageBuilder Attack(Creature enemy){

@@ -1,7 +1,5 @@
 package com.main;
 
-import java.io.Console;
-
 import com.bot.dispatcher.Event;
 import com.bot.dispatcher.filters.Command;
 import com.bot.dispatcher.handlers.MessageHandler;
@@ -304,6 +302,7 @@ public class Main {
 
     public static Dispatcher createDispatcher(){
         Dispatcher dp = new Dispatcher();
+
         dp.addHandler(
                 new MessageHandler(
                         new Command("start"),
@@ -317,14 +316,96 @@ public class Main {
                                         /retry - начать заново
                                         /help - помощь""").build();
                                 bot.executeAsync(msg);
-                                Room room = new Room("Комната 1").put(new Room("Room 2"));
+                                Box room = createRoom();
                                 event.setData("room", room);
-                                bot.executeAsync(room.inspect().chatId(event.userId).build());
+                                event.setData("player", new Creature("Player"));
+                                event.setData("data", room);
+                                event.setData("callback", bot.executeAsync(room.inspect().chatId(event.userId).build()));
                             }
                             catch (Exception e) {}
                         }
                 )
         );
+
+        dp.addHandler(
+                new MessageHandler(
+                        new Command("help"),
+                        (Event<Message> event)->{
+                            try {
+                                var msg = SendMessage.builder().chatId(event.userId).text("""
+                                        Добро пожаловать в нашу текстовую РПГ
+                                        Ваша задача: выбраться из подземелья
+                                        /data - посмотреть информацию о персонаже
+                                        /bag - открыть инвентарь
+                                        /retry - начать заново
+                                        /help - помощь""").build();
+                                bot.executeAsync(msg);
+                            }
+                            catch (Exception e) {}
+                        }
+                )
+        );
+
+        dp.addHandler(
+                new MessageHandler(
+                        new Command("data"),
+                        (Event<Message> event)->{
+                            try {
+                                var obj = event.getData("player");
+                                if(obj.get() instanceof Creature player){
+                                    var msg = SendMessage.builder().chatId(event.userId).text(
+                                            "Имя: " + player.getName()+
+                                            "\nHp: " + player.getHp()+
+                                            "\nAp: " + player.getAp()
+                                    ).build();
+                                    bot.executeAsync(msg);
+                                }
+                            }
+                            catch (Exception e) {}
+                        }
+                )
+        );
+
+        dp.addHandler(
+                new MessageHandler(
+                        new Command("bag"),
+                        (Event<Message> event)->{
+                            try {
+                                var obj = event.getData("player");
+                                if(obj.get() instanceof Creature player){
+                                    event.setData("data", player.getBag());
+                                    var msg = player.getBag().inspect().text("Инвентарь:").chatId(event.userId).build();
+                                    bot.executeAsync(msg);
+                                }
+                            }
+                            catch (Exception e) {}
+                        }
+                )
+        );
+
+        dp.addHandler(
+                new MessageHandler(
+                        new Command("retry"),
+                        (Event<Message> event)->{
+                            try {
+                                var msg = SendMessage.builder().chatId(event.userId).text("""
+                                        Добро пожаловать в нашу текстовую РПГ
+                                        Ваша задача: выбраться из подземелья
+                                        /data - посмотреть информацию о персонаже
+                                        /bag - открыть инвентарь
+                                        /retry - начать заново
+                                        /help - помощь""").build();
+                                bot.executeAsync(msg);
+                                Box room = new Box("Комната 1").put(new Box("Room 2"));
+                                event.setData("room", room);
+                                event.setData("player", new Creature("Player"));
+                                event.setData("callback", bot.executeAsync(room.inspect().chatId(event.userId).build()));
+                            }
+                            catch (Exception e) {}
+                        }
+                )
+        );
+
         return dp;
     }
 
@@ -332,6 +413,15 @@ public class Main {
         DefaultBotOptions options = new DefaultBotOptions();
         options.setMaxThreads(2);
         return options;
+    }
+
+    public static Box createRoom(){
+        return new Box("Комната 1")
+                .put(new Door("Door to Room 2", new Box("Room 2")))
+                .put(new Box("Chest")
+                        .put(new Sword("Меч", 10)))
+                .put(new Box("Chest")
+                );
     }
 }
 

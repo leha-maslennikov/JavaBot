@@ -7,15 +7,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.LinkedList;
 import java.util.List;
 
-public class Room extends Item{
+public class Box extends Item{
     private List<Item> items = new LinkedList<>();
-    public Room(String name){
+    public Box(String name){
         super(name);
     }
 
-    public Room put(Item item){
+    public Box put(Item item){
         items.add(item);
         return this;
+    }
+
+    public boolean contains(Item item){
+        return items.contains(item);
+    }
+
+    public Item get(int n){
+        return items.remove(n);
     }
     @Override
     public boolean isInspectable(){
