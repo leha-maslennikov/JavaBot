@@ -17,21 +17,26 @@ public class Bot extends TelegramLongPollingBot {
     private final String botName;
     private final Dispatcher dispatcher;
     private final Storage storage;
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(3);
+    private final ExecutorService threadPool;
 
-    public Bot(DefaultBotOptions options, String botToken, String botName, Dispatcher dispatcher, Storage storage){
+    public Bot(DefaultBotOptions options, String botToken, String botName, Dispatcher dispatcher, Storage storage, int threadCount){
         super(options, botToken);
         this.botName = botName;
         this.dispatcher = dispatcher;
         this.storage = storage;
+        this.threadPool = Executors.newFixedThreadPool(threadCount);
     }
 
     public Bot(String botToken, String botName, Dispatcher dispatcher){
-        this(new DefaultBotOptions(), botToken, botName, dispatcher, new MemoryStorage());
+        this(new DefaultBotOptions(), botToken, botName, dispatcher, new MemoryStorage(), 1);
     }
 
     public Bot(DefaultBotOptions options, String botToken, String botName, Dispatcher dispatcher){
-        this(options, botToken, botName, dispatcher, new MemoryStorage());
+        this(options, botToken, botName, dispatcher, new MemoryStorage(), 1);
+    }
+
+    public Bot(DefaultBotOptions options, String botToken, String botName, Dispatcher dispatcher, int threadCount){
+        this(options, botToken, botName, dispatcher, new MemoryStorage(), threadCount);
     }
 
     /**
@@ -68,8 +73,11 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        if(update.hasMessage())
-            dispatcher.call(new Event<>(this, update.getMessage(), update.getMessage().getFrom().getId()));
+        threadPool.execute(
+                ()->{
+                    dispatcher.call(new Event(this, update));
+                }
+        );
     }
 
     /**

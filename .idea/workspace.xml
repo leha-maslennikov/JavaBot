@@ -4,8 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="TelegramLongPollingBot, Dispatcher, Storage, Main">
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Add CallbackQueryHandler">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/Callback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/Callback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/Dispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/Dispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/And.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/And.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/Filter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/Filter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/Or.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/Or.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/filters/State.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/BaseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/BaseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/CallbackQueryHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/CallbackQueryHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/EventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/EventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/dispatcher/handlers/MessageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +50,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="rpg" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -143,7 +156,7 @@
       <list>
         <item itemvalue="Gradle.JavaBot [dependencies]" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
+        <item itemvalue="Gradle.JavaBot [dependencies]" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
@@ -200,7 +213,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699173206570</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Start handlers">
+      <option name="closed" value="true" />
+      <created>1699186796850</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1699186796850</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add CallbackQueryHandler">
+      <option name="closed" value="true" />
+      <created>1699187179831</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1699187179831</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,7 +246,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="rpg" />
+                        <option value="develop" />
                       </list>
                     </value>
                   </entry>
@@ -234,7 +263,9 @@
     <MESSAGE value="added bot object" />
     <MESSAGE value="changed Bot using Thread, DefaultChat can used in threads" />
     <MESSAGE value="TelegramLongPollingBot, Dispatcher, Storage, Main" />
-    <option name="LAST_COMMIT_MESSAGE" value="TelegramLongPollingBot, Dispatcher, Storage, Main" />
+    <MESSAGE value="Start handlers" />
+    <MESSAGE value="Add CallbackQueryHandler" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add CallbackQueryHandler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

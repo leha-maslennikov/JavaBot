@@ -3,24 +3,23 @@ package com.bot.dispatcher.handlers;
 import com.bot.dispatcher.Callback;
 import com.bot.dispatcher.Event;
 import com.bot.dispatcher.filters.Filter;
-import org.telegram.telegrambots.meta.api.methods.GetMe;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
-public class MessageHandler implements BaseHandler{
-    private final Filter<Event<Message>> filter;
-    private final Callback<Event<Message>> callback;
-    public MessageHandler(Filter<Event<Message>> filter, Callback<Event<Message>> callback){
-        this.filter = filter;
-        this.callback = callback;
+public class MessageHandler extends BaseHandler{
+    public MessageHandler(Filter filter, Callback callback){
+        super(filter, callback);
     }
     @Override
-    public boolean call(Event<?> event){
-        if(event.event instanceof Message message){
-            var e = new Event<>(event.bot, message, message.getFrom().getId());
-            if(filter.call(e)){
-                callback.call(e);
-                return true;
-            }
+    public boolean call(Event event){
+        if(!event.event.hasMessage()){
+            return false;
+        }
+        if(event.userId==-1){
+            event.userId = event.event.getMessage().getFrom().getId();
+            event.state = event.getData("state");
+        }
+        if(filter.call(event)){
+            callback.call(event);
+            return true;
         }
         return false;
     }
