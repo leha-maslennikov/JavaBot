@@ -2,6 +2,8 @@ package com.main;
 
 import com.bot.dispatcher.Event;
 import com.bot.dispatcher.filters.Command;
+import com.bot.dispatcher.filters.Filter;
+import com.bot.dispatcher.handlers.CallbackQueryHandler;
 import com.bot.dispatcher.handlers.MessageHandler;
 import com.game.*;
 
@@ -9,8 +11,10 @@ import com.bot.Bot;
 import com.bot.dispatcher.Dispatcher;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -302,6 +306,114 @@ public class Main {
 
     public static Dispatcher createDispatcher(){
         Dispatcher dp = new Dispatcher();
+
+        dp.addHandler(
+                new CallbackQueryHandler(
+                        (Event<CallbackQuery> event)->{
+                            return event.event.getData().equals("open");
+                        },
+                        (Event<CallbackQuery> event)->{
+                            try{
+                                event.bot.executeAsync(AnswerCallbackQuery.builder().callbackQueryId(event.event.getId()).build());
+                                if(event.getData("data").get() instanceof Door door){
+                                    event.setData("room", door.getNextRoom());
+                                    event.bot.executeAsync(SendMessage.builder().chatId(event.userId)
+                                            .text("дверь открыта").build());
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                )
+        );
+
+        dp.addHandler(
+                new CallbackQueryHandler(
+                        (Event<CallbackQuery> event)->{
+                            return event.event.getData().equals("equip");
+                        },
+                        (Event<CallbackQuery> event)->{
+                            try{
+                                event.bot.executeAsync(AnswerCallbackQuery.builder().callbackQueryId(event.event.getId()).build());
+                                var p = event.getData("player");
+                                if(event.getData("data").get() instanceof Item item){
+                                    if(p.get() instanceof Creature player)
+                                    {
+                                        var builder = item.equip(player).chatId(event.userId);
+                                        event.bot.executeAsync(builder.build());
+                                    }
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                )
+        );
+
+        dp.addHandler(
+                new CallbackQueryHandler(
+                        (Event<CallbackQuery> event)->{
+                            return event.event.getData().equals("quit");
+                        },
+                        (Event<CallbackQuery> event)->{
+                            try{
+                                event.bot.executeAsync(AnswerCallbackQuery.builder().callbackQueryId(event.event.getId()).build());
+                                var r = event.getData("room").get();
+                                if(r instanceof Box room){
+                                    event.setData("data", room);
+                                    var builder = room.inspect().chatId(event.userId);
+                                    event.bot.executeAsync(builder.build());
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                )
+        );
+
+        dp.addHandler(
+                new CallbackQueryHandler(
+                        (Event<CallbackQuery> event)->{
+                            return event.event.getData().equals("inspect");
+                        },
+                        (Event<CallbackQuery> event)->{
+                            try{
+                                event.bot.executeAsync(AnswerCallbackQuery.builder().callbackQueryId(event.event.getId()).build());
+                                if(event.getData("data").get() instanceof Item item){
+                                    var builder = item.inspect().chatId(event.userId);
+                                    event.bot.executeAsync(builder.build());
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                )
+        );
+
+
+        dp.addHandler(
+                new CallbackQueryHandler(
+                        (Event<CallbackQuery> event)->{
+                            var obj = event.getData("data");
+                            String[] q = event.event.getData().split("_");
+                            try {
+                                if(q[0].equals("t") && obj.get() instanceof Box data)
+                                {
+                                    event.setData("data", data.get(Integer.parseInt(q[1])-1));
+                                    return true;
+                                }
+                            }
+                            catch (Exception e){}
+                            return false;
+                        },
+                        (Event<CallbackQuery> event)->{
+                            try{
+                                event.bot.executeAsync(AnswerCallbackQuery.builder().callbackQueryId(event.event.getId()).build());
+                                if(event.getData("data").get() instanceof Item item){
+                                    var builder = item.actions().chatId(event.userId);
+                                    event.bot.executeAsync(builder.build());
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                )
+        );
 
         dp.addHandler(
                 new MessageHandler(
