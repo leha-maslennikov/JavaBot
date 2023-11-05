@@ -6,22 +6,25 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class Event<T>{
+public class Event{
 
-    public final T event;
+    public final Update event;
     public final Bot bot;
-    public final long userId;
+    public long userId;
+    public CompletableFuture<Object> state;
 
-    public Event(Bot bot, T event, long userId){
+    public Event(Bot bot, Update event, long userId){
         this.bot = bot;
         this.event = event;
         this.userId = userId;
+        this.state = null;
     }
-    public Event(Bot bot, T event){
+    public Event(Bot bot, Update event){
         this(bot, event, -1);
     }
 

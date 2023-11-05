@@ -2,7 +2,7 @@ package com.bot.dispatcher.filters;
 
 import com.bot.dispatcher.Event;
 
-public class State implements Filter<Event<?>>{
+public class State implements Filter{
     
     private final String state;
 
@@ -15,15 +15,17 @@ public class State implements Filter<Event<?>>{
     }
 
     @Override
-    public boolean call(Event<?> event){
-        Object obj = null;
+    public boolean call(Event event){
+        if(event.state == null) return false;
         try{
-            obj = event.getData("state").get();
+            Object obj = event.state.get();
+            if(obj == null) obj = "";
+            if(obj instanceof String state){
+               return this.state.equals(state);
+            }
         }
-        catch (Exception e){}
-        if(obj == null) return false;
-        if(obj instanceof String state){
-            return this.state.equals(state);
+        catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }

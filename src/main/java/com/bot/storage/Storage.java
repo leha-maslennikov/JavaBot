@@ -8,7 +8,15 @@ import java.util.concurrent.Executors;
  * Интерфейс хранилища данных пользователей
  */
 public abstract class Storage {
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(1);
+    private final ExecutorService threadPool;
+
+    public Storage(){
+        this.threadPool = Executors.newFixedThreadPool(1);
+    }
+    public Storage(int threadCount){
+        this.threadPool = Executors.newFixedThreadPool(threadCount);
+    }
+
     /**
      * @param userId id пользователя
      * @param key название ключа для данных

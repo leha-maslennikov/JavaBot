@@ -1,7 +1,7 @@
 package com.bot.dispatcher.filters;
 
-public interface Filter<T> {
-    default boolean call(T event){
-        return true;
-    }
+import com.bot.dispatcher.Event;
+
+public interface Filter {
+    boolean call(Event event);
 }
