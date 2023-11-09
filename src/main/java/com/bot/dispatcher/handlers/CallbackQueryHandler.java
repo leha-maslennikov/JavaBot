@@ -14,7 +14,7 @@ public class CallbackQueryHandler extends BaseHandler{
             return false;
         }
         if(event.userId==-1){
-            event.userId = event.event.getMessage().getFrom().getId();
+            event.userId = event.event.getCallbackQuery().getFrom().getId();
             event.state = event.getData("state");
         }
         if(filter.call(event)){
