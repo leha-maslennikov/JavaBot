@@ -65,8 +65,8 @@ public abstract class GameProcessor {
 
     public void data(){
         send("Name: " + player.getName() +
-                "Hp: " + player.getHp() +
-                "Ap: " + player.getAp()
+                "\nHp: " + player.getHp() +
+                "\nAp: " + player.getAp()
         );
     }
 
@@ -94,7 +94,7 @@ public abstract class GameProcessor {
     }
 
     public void loot(Box box){
-        StringBuilder builder = new StringBuilder("Вы получили:");
+        StringBuilder builder = new StringBuilder("Вы получили:\n");
         for(Item item: box.getItems()){
             builder.append(item.getShortText());
             builder.append("\n");

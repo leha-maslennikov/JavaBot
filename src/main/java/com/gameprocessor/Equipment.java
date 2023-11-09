@@ -13,6 +13,7 @@ public class Equipment extends Item{
         creature.getEquipment().add(this);
         creature.setHp(creature.getHp()+hp);
         creature.setAp(creature.getAp()+ap);
+        creature.getInventory().remove(this);
     }
 
     public void unequip(Creature creature){
