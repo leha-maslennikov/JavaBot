@@ -7,10 +7,12 @@ public class Room {
 
     private final String name;
     private final List<Item> items;
+    private final List<Creature> enemies;
 
     public Room(String name){
         this.name = name;
         this.items = new LinkedList<>();
+        this.enemies=new LinkedList<>();
     }
 
     public String getName() {
@@ -19,6 +21,18 @@ public class Room {
 
     public List<Item> getItems() {
         return items;
+    }
+    public List<Creature> getEnemies(){return enemies;}
+    public void deleteEnemy()
+    {
+        for(int i=0;i<enemies.size();i++)
+        {
+            if(enemies.get(i).getHp()==0)
+            {
+                enemies.remove(i);
+                i--;
+            }
+        }
     }
 
     public static RoomBuilder builder(String name){
@@ -34,6 +48,12 @@ public class Room {
 
         public RoomBuilder addItem(Item item){
             this.room.getItems().add(item);
+            return this;
+        }
+
+        public RoomBuilder addEnemy(Creature enemy)
+        {
+            this.room.getEnemies().add(enemy);
             return this;
         }
 

@@ -16,6 +16,7 @@ import java.util.List;
 public abstract class GameProcessor {
 
     private Creature player;
+    private Creature bat;
     private Room room;
 
     /**
@@ -47,7 +48,8 @@ public abstract class GameProcessor {
                 /retry - начать заново
                 /help - помощь
                 """);
-        player = new Creature();
+        player = new Creature("player",10,1);
+        bat = new Creature("bat",3,1);
         room = Room.builder("Room 1")
                 .addItem(new Item("Sth", "Rubish"))
                 .addItem(
@@ -56,6 +58,7 @@ public abstract class GameProcessor {
                                 .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
                                 .build()
                 )
+                .addEnemy(bat)
                 .build();
     }
 
@@ -112,5 +115,48 @@ public abstract class GameProcessor {
     public void unequip(Equipment equipment){
         equipment.unequip(player);
         send("Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
+    }
+
+    public void attack(Creature creature)
+    {
+        send("Вы атакуете "+creature.getName()+"\n");
+        player.attack(creature);
+        send(creature.getName() + " получает" + player.getAp() + " урона");
+
+        if(creature.getHp()==0)
+        {
+            send(creature.getName()+" повержен");
+            room.deleteEnemy();
+        }
+
+        for (int i=0;i<room.getEnemies().size();i++)
+        {
+            send(room.getEnemies().get(i).getName()+ " атакует" +"\n");
+            room.getEnemies().get(i).attack(player);
+            send("Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
+            if(player.getHp()==0)
+            {
+                send("Вы проиграли. Игра окончена");
+                retry();
+            }
+        }
+
+
+
+    }
+    public void await()
+    {
+        send("Вы ничего не делаете");
+        for (int i=0;i<room.getEnemies().size();i++)
+        {
+            send(room.getEnemies().get(i).getName()+ " атакует" +"\n");
+            room.getEnemies().get(i).attack(player);
+            send("Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
+            if(player.getHp()==0)
+            {
+                send("Вы проиграли. Игра окончена");
+                retry();
+            }
+        }
     }
 }

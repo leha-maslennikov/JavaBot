@@ -9,10 +9,10 @@ public class Creature {
     private final LinkedList<Item> inventory;
     private final LinkedList<Item> equipment;
 
-    public Creature(){
-        this.name = "player";
-        this.hp = 10;
-        this.ap = 1;
+    public Creature(String name, int hp, int ap){
+        this.name = name;
+        this.hp = hp;
+        this.ap = ap;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
     }
@@ -47,5 +47,14 @@ public class Creature {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void attack(Creature creature)
+    {
+        creature.setHp(creature.getHp()-this.getAp());
+        if(creature.hp<0)
+        {
+            creature.setHp(0);
+        }
     }
 }
