@@ -17,6 +17,7 @@ public abstract class GameProcessor {
 
     private Creature player;
     private Room room;
+    private boolean combatFlag;
 
     /**
      * Отправляет текстовое сообщение пользователю
@@ -35,7 +36,44 @@ public abstract class GameProcessor {
     /**
      * Не использовать
      */
-    public abstract void callback(String callbackData);
+    public void callback(String callbackData){
+        if(combatFlag){
+            if(callbackData.equals("/attack")){
+                attack(room.getEnemies().get(0));
+            }
+            else if(callbackData.equals("/await")){
+                await();
+            }
+            else {
+                await();
+            }
+            return;
+        }
+        if(callbackData.equals("/start")){
+            start();
+            return;
+        }
+        if(callbackData.equals("/inspect")){
+            inspect();
+            return;
+        }
+        if(callbackData.equals("/data")){
+            data();
+            return;
+        }
+        if(callbackData.equals("/bag")){
+            bag();
+            return;
+        }
+        if(callbackData.equals("/retry")){
+            retry();
+            return;
+        }
+        if(callbackData.equals("/help")){
+            help();
+            return;
+        }
+    }
 
     public void start(){
         send("""
@@ -46,7 +84,7 @@ public abstract class GameProcessor {
                 /bag - открыть инвентарь
                 /retry - начать заново
                 /help - помощь
-                """);
+            """);
         player = new Creature("player",10,1);
         room = Room.builder("Room 1")
                 .addItem(new Item("Sth", "Rubish"))
@@ -121,34 +159,23 @@ public abstract class GameProcessor {
         send("Вы атакуете "+creature.getName());
         player.attack(creature);
         send(creature.getName() + " получает" + player.getAp() + " урона");
-
         if(creature.getHp()==0)
         {
             send(creature.getName()+" повержен");
             room.deleteEnemy();
         }
-
-        for (int i=0;i<room.getEnemies().size();i++)
-        {
-            send(room.getEnemies().get(i).getName()+ " атакует" +"\n");
-            room.getEnemies().get(i).attack(player);
-            send("Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
-            if(player.getHp()==0)
-            {
-                send("Вы проиграли. Игра окончена");
-                retry();
-            }
+        if(room.getEnemies().isEmpty()){
+            combatFlag=false;
+            send("Все враги побеждены");
+            return;
         }
-
-
-
+        await();
     }
     public void await()
     {
-        send("Вы ничего не делаете");
         for (int i=0;i<room.getEnemies().size();i++)
         {
-            send(room.getEnemies().get(i).getName()+ " атакует" +"\n");
+            send(room.getEnemies().get(i).getName()+ " атакует");
             room.getEnemies().get(i).attack(player);
             send("Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
             if(player.getHp()==0)
@@ -161,5 +188,11 @@ public abstract class GameProcessor {
 
     public void open(Door door){
         this.room = door.getRoom();
+        if(!room.getEnemies().isEmpty()){
+            combatFlag = true;
+            send("На вас напали.");
+            await();
+            send("/attack - атаковать\n/await - пропустить ход");
+        }
     }
 }
