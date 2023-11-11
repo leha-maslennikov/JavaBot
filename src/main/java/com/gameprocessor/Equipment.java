@@ -10,17 +10,21 @@ public class Equipment extends Item{
     }
 
     public void equip(Creature creature){
-        creature.getEquipment().add(this);
-        creature.setHp(creature.getHp()+hp);
-        creature.setAp(creature.getAp()+ap);
-        creature.getInventory().remove(this);
+        if(creature.getInventory().contains(this)){
+            creature.getInventory().remove(this);
+            creature.getEquipment().add(this);
+            creature.setHp(creature.getHp() + hp);
+            creature.setAp(creature.getAp() + ap);
+        }
     }
 
     public void unequip(Creature creature){
-        creature.getEquipment().remove(this);
-        creature.getInventory().add(this);
-        creature.setHp(creature.getHp()-hp);
-        creature.setAp(creature.getAp()-ap);
+        if(creature.getEquipment().contains(this)) {
+            creature.getEquipment().remove(this);
+            creature.getInventory().add(this);
+            creature.setHp(creature.getHp() - hp);
+            creature.setAp(creature.getAp() - ap);
+        }
     }
 
     @Override
