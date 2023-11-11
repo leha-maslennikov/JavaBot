@@ -49,7 +49,7 @@ public abstract class GameProcessor {
                 /help - помощь
                 """);
         player = new Creature("player",10,1);
-        bat = new Creature("bat",3,1);
+        Creature bat = new Creature("bat",3,1);
         room = Room.builder("Room 1")
                 .addItem(new Item("Sth", "Rubish"))
                 .addItem(
@@ -119,7 +119,7 @@ public abstract class GameProcessor {
 
     public void attack(Creature creature)
     {
-        send("Вы атакуете "+creature.getName()+"\n");
+        send("Вы атакуете "+creature.getName());
         player.attack(creature);
         send(creature.getName() + " получает" + player.getAp() + " урона");
 
@@ -158,5 +158,9 @@ public abstract class GameProcessor {
                 retry();
             }
         }
+    }
+
+    public void open(Door door){
+        this.room = door.getRoom();
     }
 }

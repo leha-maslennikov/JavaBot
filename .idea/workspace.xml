@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Sendable, GameProcessor, Item">
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="TelegramGameProcessor::callback">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +84,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="game_processor" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
