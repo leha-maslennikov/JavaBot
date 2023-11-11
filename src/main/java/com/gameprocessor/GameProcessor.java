@@ -67,7 +67,8 @@ public abstract class GameProcessor {
     public void data(){
         send("Name: " + player.getName() +
                 "\nHp: " + player.getHp() +
-                "\nAp: " + player.getAp()
+                "\nAp: " + player.getAp() +
+                "\nЭкипировано:", this.player.getEquipment()
         );
     }
 
