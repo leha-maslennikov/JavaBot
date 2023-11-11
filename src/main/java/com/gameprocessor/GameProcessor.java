@@ -16,7 +16,6 @@ import java.util.List;
 public abstract class GameProcessor {
 
     private Creature player;
-    private Creature bat;
     private Room room;
 
     /**
@@ -49,7 +48,6 @@ public abstract class GameProcessor {
                 /help - помощь
                 """);
         player = new Creature("player",10,1);
-        Creature bat = new Creature("bat",3,1);
         room = Room.builder("Room 1")
                 .addItem(new Item("Sth", "Rubish"))
                 .addItem(
@@ -58,7 +56,7 @@ public abstract class GameProcessor {
                                 .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
                                 .build()
                 )
-                .addEnemy(bat)
+                .addEnemy(new Creature("bat",3,1))
                 .build();
     }
 
