@@ -2,7 +2,9 @@ package com.main;
 
 import com.bot.Bot;
 import com.bot.dispatcher.Dispatcher;
+import com.bot.dispatcher.Event;
 import com.bot.dispatcher.filters.Command;
+import com.bot.dispatcher.filters.Filter;
 import com.bot.dispatcher.filters.State;
 import com.bot.dispatcher.handlers.CallbackQueryHandler;
 import com.bot.dispatcher.handlers.MessageHandler;
@@ -14,6 +16,8 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -45,7 +49,7 @@ public class Main {
 
         dp.addHandler(
                 new MessageHandler(
-                        new Command("start"),
+                        new FilterWithDelete(new Command("start")),
                         (event)->{
                             event.getData("game").thenAccept(
                                     (object)->{
@@ -65,7 +69,7 @@ public class Main {
 
         dp.addHandler(
                 new MessageHandler(
-                        new Command("inspect"),
+                        new FilterWithDelete(new Command("inspect")),
                         (event)->{
                             event.getData("game").thenAccept(
                                     (object)->{
@@ -110,7 +114,7 @@ public class Main {
 
         dp.addHandler(
                 new MessageHandler(
-                        new Command("retry"),
+                        new FilterWithDelete(new Command("retry")),
                         (event)->{
                             event.getData("game").thenAccept(
                                     (object)->{
@@ -125,7 +129,7 @@ public class Main {
 
         dp.addHandler(
                 new MessageHandler(
-                        new Command("bag"),
+                        new FilterWithDelete(new Command("bag")),
                         (event)->{
                             event.getData("game").thenAccept(
                                     (object)->{
@@ -140,7 +144,7 @@ public class Main {
 
         dp.addHandler(
                 new CallbackQueryHandler(
-                        new State("send"),
+                        new FilterWithDelete(new State("send")),
                         event -> {
                             event.getData("game").thenAccept(
                                     object -> {
