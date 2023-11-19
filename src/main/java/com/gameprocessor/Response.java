@@ -7,7 +7,7 @@ public class Response {
     public String text;
     public LinkedList<ResponseObject> objects;
 
-    public ResponseBuilder builder(){
+    public static ResponseBuilder builder(){
         return new ResponseBuilder();
     }
 

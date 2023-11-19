@@ -23,7 +23,7 @@ public abstract class GameProcessor {
      * Отправляет текстовое сообщение пользователю
      * @param text текст, для пользователя
      */
-    public abstract void send(String text);
+    public abstract void send(Request request, String text);
 
     /**
      * Отправляет объекты пользователю, с текстом из getShortText,
@@ -31,7 +31,11 @@ public abstract class GameProcessor {
      * и действия из getActions
      * @param obj объекты, который будет отправлен пользователю
      */
-    public abstract void send(String text, List<? extends Sendable> obj);
+    public abstract void send(Request request, String text, List<? extends Sendable> obj);
+
+    public Response handleRequest(Request request){
+        return new Response();
+    }
 
     /**
      * Не использовать
@@ -75,8 +79,9 @@ public abstract class GameProcessor {
         }
     }
 
-    public void start(){
-        send("""
+    public void start(Request request){
+        send(request,
+                """
                 Добро пожаловать в нашу текстовую РПГ
                 Ваша задача: выбраться из подземелья
                 /inspect - осмотреть окружение
@@ -98,20 +103,21 @@ public abstract class GameProcessor {
                 .build();
     }
 
-    public void inspect(){
-        send("Вы находитесь в " + room.getName() + ":", room.getItems());
+    public void inspect(Request request){
+        send(request,"Вы находитесь в " + room.getName() + ":", room.getItems());
     }
 
-    public void data(){
-        send("Name: " + player.getName() +
+    public void data(Request request){
+        send(request,"Name: " + player.getName() +
                 "\nHp: " + player.getHp() +
                 "\nAp: " + player.getAp() +
                 "\nЭкипировано:", this.player.getEquipment()
         );
     }
 
-    public void help(){
-        send("""
+    public void help(Request request){
+        send(request,
+                """
                 Ваша задача: выбраться из подземелья
                 /inspect - осмотреть окружение
                 /data - посмотреть информацию о персонаже
@@ -121,19 +127,19 @@ public abstract class GameProcessor {
                 """);
     }
 
-    public void retry(){
-        start();
+    public void retry(Request request){
+        start(request);
     }
 
-    public void bag(){
-        send("В вашем инвентаре:", player.getInventory());
+    public void bag(Request request){
+        send(request,"В вашем инвентаре:", player.getInventory());
     }
 
     public void take(Item item){
         //TODO подбирать предметы из комнаты
     }
 
-    public void loot(Box box){
+    public void loot(Request request, Box box){
         StringBuilder builder = new StringBuilder("Вы получили:\n");
         for(Item item: box.getItems()){
             builder.append(item.getShortText());
@@ -141,58 +147,58 @@ public abstract class GameProcessor {
             player.getInventory().add(item);
         }
         box = new Box(box.getLongText(), "Пусто");
-        send(builder.toString());
+        send(request, builder.toString());
     }
 
-    public void equip(Equipment equipment){
+    public void equip(Request request, Equipment equipment){
         equipment.equip(player);
-        send("Вы надели " + equipment.getShortText());
+        send(request, "Вы надели " + equipment.getShortText());
     }
 
-    public void unequip(Equipment equipment){
+    public void unequip(Request request, Equipment equipment){
         equipment.unequip(player);
-        send("Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
+        send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
     }
 
-    public void attack(Creature creature)
+    public void attack(Request request, Creature creature)
     {
-        send("Вы атакуете "+creature.getName());
+        send(request,"Вы атакуете "+creature.getName());
         player.attack(creature);
-        send(creature.getName() + " получает" + player.getAp() + " урона");
+        send(request,creature.getName() + " получает" + player.getAp() + " урона");
         if(creature.getHp()==0)
         {
-            send(creature.getName()+" повержен");
+            send(request,creature.getName()+" повержен");
             room.deleteEnemy();
         }
         if(room.getEnemies().isEmpty()){
             combatFlag=false;
-            send("Все враги побеждены");
+            send(request,"Все враги побеждены");
             return;
         }
-        await();
+        await(request);
     }
-    public void await()
+    public void await(Request request)
     {
         for (int i=0;i<room.getEnemies().size();i++)
         {
-            send(room.getEnemies().get(i).getName()+ " атакует");
+            send(request,room.getEnemies().get(i).getName()+ " атакует");
             room.getEnemies().get(i).attack(player);
-            send("Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
+            send(request,"Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
             if(player.getHp()==0)
             {
-                send("Вы проиграли. Игра окончена");
-                retry();
+                send(request,"Вы проиграли. Игра окончена");
+                retry(request);
             }
         }
     }
 
-    public void open(Door door){
+    public void open(Request request, Door door){
         this.room = door.getRoom();
         if(!room.getEnemies().isEmpty()){
             combatFlag = true;
-            send("На вас напали.");
-            await();
-            send("/attack - атаковать\n/await - пропустить ход");
+            send(request,"На вас напали.");
+            await(request);
+            send(request,"/attack - атаковать\n/await - пропустить ход");
         }
     }
 }
