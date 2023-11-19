@@ -4,6 +4,11 @@ public class Resource {
     private String id;
     private String objectClass;
 
+    public Resource(String id, String objectClass){
+        this.id = id;
+        this.objectClass = objectClass;
+    }
+
     public String getId() {
         return id;
     }

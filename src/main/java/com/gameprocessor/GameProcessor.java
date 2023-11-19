@@ -15,15 +15,16 @@ import java.util.List;
  */
 public abstract class GameProcessor {
 
-    private Creature player;
-    private Room room;
-    private boolean combatFlag;
-
     /**
      * Отправляет текстовое сообщение пользователю
      * @param text текст, для пользователя
      */
-    public abstract void send(Request request, String text);
+    public void send(Request request, String text){
+        request.response = Response.builder()
+                .userId(request.getUserId())
+                .text(text)
+                .build();
+    }
 
     /**
      * Отправляет объекты пользователю, с текстом из getShortText,
@@ -31,7 +32,17 @@ public abstract class GameProcessor {
      * и действия из getActions
      * @param obj объекты, который будет отправлен пользователю
      */
-    public abstract void send(Request request, String text, List<? extends Sendable> obj);
+    public void send(Request request, String text, List<Resource> resources){
+        var response = Response.builder()
+                .userId(request.getUserId())
+                .text(text);
+        for(Resource resource: resources){
+            if(resource.get() instanceof Sendable obj){
+                response.addObject(obj, resource.getId());
+            }
+        }
+        request.response = response.build();
+    }
 
     public Response handleRequest(Request request){
         return new Response();
@@ -79,6 +90,9 @@ public abstract class GameProcessor {
         }
     }
 
+    public void createUser(Request request){
+
+    }
     public void start(Request request){
         send(request,
                 """
@@ -90,8 +104,7 @@ public abstract class GameProcessor {
                 /retry - начать заново
                 /help - помощь
             """);
-        player = new Creature("player",10,1);
-        room = Room.builder("Room 1")
+        Room room = Room.builder("Room 1")
                 .addItem(new Item("Sth", "Rubish"))
                 .addItem(
                         Box.builder("Chest", "Old chest")
@@ -101,6 +114,15 @@ public abstract class GameProcessor {
                 )
                 .addEnemy(new Creature("bat",3,1))
                 .build();
+        ResourceManager.createResource(
+                request.getUserId(),
+                "UserData",
+                new UserData(
+                        request.getUserId(),
+                        new Creature("player",10,1),
+                        room
+                )
+        );
     }
 
     public void inspect(Request request){
