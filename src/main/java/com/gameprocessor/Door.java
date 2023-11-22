@@ -1,17 +1,17 @@
 package com.gameprocessor;
 
 public class Door implements Sendable{
-    private final String name;
-    private final String description;
-    private final Room room;
+    public String name;
+    public String description;
+    public Resource room;
 
-    public Door(String name, String description, Room room){
+    public Door(String name, String description, Room room, String userId){
         this.name = name;
         this.description = description;
-        this.room = room;
+        this.room = ResourceManager.createResource(userId, room);
     }
 
-    public Room getRoom() {
+    public Resource getRoom() {
         return room;
     }
 

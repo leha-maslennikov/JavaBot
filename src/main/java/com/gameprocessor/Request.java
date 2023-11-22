@@ -18,6 +18,13 @@ public class Request {
         return action;
     }
 
+    public Resource getUserData(){
+        return new Resource(
+                this.userId+"UserData",
+                UserData.class.getName()
+        );
+    }
+
     public Response getResponse() {
         return response;
     }

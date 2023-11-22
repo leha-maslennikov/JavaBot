@@ -4,11 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="GameProcessor::handleRequest, Response::builder">
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Global changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Actions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Actions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Creature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Creature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Door.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/UserData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700404006019</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Global changes">
+      <option name="closed" value="true" />
+      <created>1700420121619</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1700420121619</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -151,6 +168,7 @@
     <MESSAGE value="ResourceManager, Resource" />
     <MESSAGE value="Request, Response" />
     <MESSAGE value="GameProcessor::handleRequest, Response::builder" />
-    <option name="LAST_COMMIT_MESSAGE" value="GameProcessor::handleRequest, Response::builder" />
+    <MESSAGE value="Global changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Global changes" />
   </component>
 </project>

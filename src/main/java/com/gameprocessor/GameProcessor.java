@@ -13,7 +13,7 @@ import java.util.List;
  *      является реализацией действия,
  *      которой совершается с этим объектом
  */
-public abstract class GameProcessor {
+public class GameProcessor {
 
     /**
      * Отправляет текстовое сообщение пользователю
@@ -30,7 +30,7 @@ public abstract class GameProcessor {
      * Отправляет объекты пользователю, с текстом из getShortText,
      * если пользователь выбрал объект, отправляется getLongText
      * и действия из getActions
-     * @param obj объекты, который будет отправлен пользователю
+     //* @param obj объекты, который будет отправлен пользователю
      */
     public void send(Request request, String text, List<Resource> resources){
         var response = Response.builder()
@@ -45,49 +45,24 @@ public abstract class GameProcessor {
     }
 
     public Response handleRequest(Request request){
-        return new Response();
-    }
-
-    /**
-     * Не использовать
-     */
-    public void callback(String callbackData){
-        if(combatFlag){
-            if(callbackData.equals("/attack")){
-                attack(room.getEnemies().get(0));
+        switch (request.callbackData) {
+            case "/start" -> start(request);
+            case "/inspect" -> inspect(request);
+            case "/data" -> data(request);
+            case "/bag" -> bag(request);
+            case "/retry" -> retry(request);
+            case "/help" -> help(request);
+            default -> {
+                Resource resource = new Resource(request.callbackData);
+                switch (request.action) {
+                    case "loot" -> loot(request, resource);
+                    case "equip" -> equip(request, resource);
+                    case "unequip" -> unequip(request, resource);
+                    case "open" -> open(request, resource);
+                }
             }
-            else if(callbackData.equals("/await")){
-                await();
-            }
-            else {
-                await();
-            }
-            return;
         }
-        if(callbackData.equals("/start")){
-            start();
-            return;
-        }
-        if(callbackData.equals("/inspect")){
-            inspect();
-            return;
-        }
-        if(callbackData.equals("/data")){
-            data();
-            return;
-        }
-        if(callbackData.equals("/bag")){
-            bag();
-            return;
-        }
-        if(callbackData.equals("/retry")){
-            retry();
-            return;
-        }
-        if(callbackData.equals("/help")){
-            help();
-            return;
-        }
+        return request.response;
     }
 
     public void createUser(Request request){
@@ -105,9 +80,11 @@ public abstract class GameProcessor {
                 /help - помощь
             """);
         Room room = Room.builder("Room 1")
+                .userId(request.getUserId())
                 .addItem(new Item("Sth", "Rubish"))
                 .addItem(
                         Box.builder("Chest", "Old chest")
+                                .userId(request.getUserId())
                                 .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
                                 .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
                                 .build()
@@ -126,14 +103,18 @@ public abstract class GameProcessor {
     }
 
     public void inspect(Request request){
+        UserData userData = (UserData) request.getUserData().get();
+        Room room = (Room) userData.getRoom().get();
         send(request,"Вы находитесь в " + room.getName() + ":", room.getItems());
     }
 
     public void data(Request request){
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
         send(request,"Name: " + player.getName() +
                 "\nHp: " + player.getHp() +
                 "\nAp: " + player.getAp() +
-                "\nЭкипировано:", this.player.getEquipment()
+                "\nЭкипировано:", player.getEquipment()
         );
     }
 
@@ -154,6 +135,8 @@ public abstract class GameProcessor {
     }
 
     public void bag(Request request){
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
         send(request,"В вашем инвентаре:", player.getInventory());
     }
 
@@ -161,66 +144,84 @@ public abstract class GameProcessor {
         //TODO подбирать предметы из комнаты
     }
 
-    public void loot(Request request, Box box){
+    public void loot(Request request, Resource resource){
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Box box = (Box) resource.get();
         StringBuilder builder = new StringBuilder("Вы получили:\n");
-        for(Item item: box.getItems()){
+        for(Resource i: box.getItems()){
+            Item item = (Item) i.get();
             builder.append(item.getShortText());
             builder.append("\n");
-            player.getInventory().add(item);
+            player.getInventory().add(i);
         }
         box = new Box(box.getLongText(), "Пусто");
         send(request, builder.toString());
     }
 
-    public void equip(Request request, Equipment equipment){
-        equipment.equip(player);
+    public void equip(Request request, Resource resource){
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Equipment equipment = (Equipment) resource.get();
+        player.getInventory().remove(resource);
+        player.getEquipment().add(resource);
+        player.setHp(player.getHp() + equipment.hp);
+        player.setAp(player.getAp() + equipment.ap);
         send(request, "Вы надели " + equipment.getShortText());
     }
 
-    public void unequip(Request request, Equipment equipment){
-        equipment.unequip(player);
+    public void unequip(Request request, Resource resource){
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Equipment equipment = (Equipment) resource.get();
+        player.getInventory().add(resource);
+        player.getEquipment().remove(resource);
+        player.setHp(player.getHp() - equipment.hp);
+        player.setAp(player.getAp() - equipment.ap);
         send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
     }
 
-    public void attack(Request request, Creature creature)
-    {
-        send(request,"Вы атакуете "+creature.getName());
-        player.attack(creature);
-        send(request,creature.getName() + " получает" + player.getAp() + " урона");
-        if(creature.getHp()==0)
-        {
-            send(request,creature.getName()+" повержен");
-            room.deleteEnemy();
-        }
-        if(room.getEnemies().isEmpty()){
-            combatFlag=false;
-            send(request,"Все враги побеждены");
-            return;
-        }
-        await(request);
-    }
-    public void await(Request request)
-    {
-        for (int i=0;i<room.getEnemies().size();i++)
-        {
-            send(request,room.getEnemies().get(i).getName()+ " атакует");
-            room.getEnemies().get(i).attack(player);
-            send(request,"Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
-            if(player.getHp()==0)
-            {
-                send(request,"Вы проиграли. Игра окончена");
-                retry(request);
-            }
-        }
-    }
+//    public void attack(Request request, Creature creature)
+//    {
+//        send(request,"Вы атакуете "+creature.getName());
+//        player.attack(creature);
+//        send(request,creature.getName() + " получает" + player.getAp() + " урона");
+//        if(creature.getHp()==0)
+//        {
+//            send(request,creature.getName()+" повержен");
+//            room.deleteEnemy();
+//        }
+//        if(room.getEnemies().isEmpty()){
+//            combatFlag=false;
+//            send(request,"Все враги побеждены");
+//            return;
+//        }
+//        await(request);
+//    }
+//    public void await(Request request)
+//    {
+//        for (int i=0;i<room.getEnemies().size();i++)
+//        {
+//            send(request,room.getEnemies().get(i).getName()+ " атакует");
+//            room.getEnemies().get(i).attack(player);
+//            send(request,"Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
+//            if(player.getHp()==0)
+//            {
+//                send(request,"Вы проиграли. Игра окончена");
+//                retry(request);
+//            }
+//        }
+//    }
 
-    public void open(Request request, Door door){
-        this.room = door.getRoom();
-        if(!room.getEnemies().isEmpty()){
-            combatFlag = true;
-            send(request,"На вас напали.");
-            await(request);
-            send(request,"/attack - атаковать\n/await - пропустить ход");
-        }
+    public void open(Request request, Resource resource){
+        UserData userData = (UserData) request.getUserData().get();
+        Door door = (Door) resource.get();
+        userData.room = door.getRoom();
+//        if(!room.getEnemies().isEmpty()){
+//            combatFlag = true;
+//            send(request,"На вас напали.");
+//            await(request);
+//            send(request,"/attack - атаковать\n/await - пропустить ход");
+//        }
     }
 }

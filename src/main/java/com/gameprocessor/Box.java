@@ -4,13 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Box extends Item{
-    private final List<Item> items;
+    public List<Resource> items;
     public Box(String name, String description) {
         super(name, description);
         this.items = new LinkedList<>();
     }
 
-    public List<Item> getItems() {
+    public List<Resource> getItems() {
         return items;
     }
 
@@ -27,13 +27,18 @@ public class Box extends Item{
 
     public static class BoxBuilder{
         private final Box box;
+        private String userId;
 
         public BoxBuilder(String name, String description){
             this.box = new Box(name,description);
         }
 
+        public BoxBuilder userId(String userId){
+            if(this.userId == null) this.userId = userId;
+            return this;
+        }
         public BoxBuilder addItem(Item item){
-            this.box.getItems().add(item);
+            if(this.userId != null) this.box.getItems().add(ResourceManager.createResource(this.userId, item));
             return this;
         }
 

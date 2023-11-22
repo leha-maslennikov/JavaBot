@@ -4,8 +4,8 @@ package com.gameprocessor;
  * Игровой предмет
  */
 public class Item implements Sendable{
-    private final String name;
-    private final String description;
+    public String name;
+    public String description;
 
     public Item(String name, String description){
         this.name = name;

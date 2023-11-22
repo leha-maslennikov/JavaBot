@@ -5,35 +5,35 @@ import java.util.List;
 
 public class Room {
 
-    private final String name;
-    private final List<Item> items;
-    private final List<Creature> enemies;
+    public String name;
+    public List<Resource> items;
+    public List<Resource> enemies;
 
     public Room(String name){
         this.name = name;
         this.items = new LinkedList<>();
-        this.enemies=new LinkedList<>();
+        this.enemies = new LinkedList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Item> getItems() {
+    public List<Resource> getItems() {
         return items;
     }
-    public List<Creature> getEnemies(){return enemies;}
-    public void deleteEnemy()
-    {
-        for(int i=0;i<enemies.size();i++)
-        {
-            if(enemies.get(i).getHp()==0)
-            {
-                enemies.remove(i);
-                i--;
-            }
-        }
-    }
+    public List<Resource> getEnemies(){return enemies;}
+//    public void deleteEnemy()
+//    {
+//        for(int i=0;i<enemies.size();i++)
+//        {
+//            if(enemies.get(i).get().getHp()==0)
+//            {
+//                enemies.remove(i);
+//                i--;
+//            }
+//        }
+//    }
 
     public static RoomBuilder builder(String name){
         return new RoomBuilder(name);
@@ -41,19 +41,29 @@ public class Room {
 
     public static class RoomBuilder{
         private final Room room;
+        private String userId;
 
         public RoomBuilder(String name){
             this.room = new Room(name);
         }
 
+        public RoomBuilder userId(String userId){
+            if(this.userId == null) this.userId = userId;
+            return this;
+        }
+
         public RoomBuilder addItem(Item item){
-            this.room.getItems().add(item);
+            if(this.userId != null) {
+                this.room.getItems().add(ResourceManager.createResource(this.userId, item));
+            }
             return this;
         }
 
         public RoomBuilder addEnemy(Creature enemy)
         {
-            this.room.getEnemies().add(enemy);
+            if(this.userId != null) {
+                this.room.getEnemies().add(ResourceManager.createResource(this.userId, enemy));
+            }
             return this;
         }
 

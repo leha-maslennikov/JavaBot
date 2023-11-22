@@ -1,20 +1,24 @@
 package com.gameprocessor;
 
 public class Resource {
-    private String id;
-    private String objectClass;
+    public String id;
+
+    public Resource(String id){
+        this.id = id;
+    }
 
     public Resource(String id, String objectClass){
-        this.id = id;
-        this.objectClass = objectClass;
+        this.id = id+":"+objectClass;
     }
 
     public String getId() {
-        return id;
+        String[] args = id.split(":");
+        return args[0]+args[1];
     }
 
     public String getObjectClass() {
-        return objectClass;
+        String[] args = id.split(":");
+        return args[args.length-1];
     }
 
     public Object get(){
@@ -22,10 +26,20 @@ public class Resource {
     }
 
     public void update(Object object){
-        ResourceManager.update(this, object);
+        Resource resource = ResourceManager.update(this, object);
+        this.id = resource.id;
     }
 
     public void delete(){
         ResourceManager.delete(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj instanceof Resource resource) {
+            return id.equals(resource.id);
+        }
+       return false;
     }
 }

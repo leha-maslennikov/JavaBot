@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Actions {
-    private final List<String> actions;
+    public List<String> actions;
 
     public Actions(){
         this.actions = new LinkedList<>();

@@ -3,11 +3,11 @@ package com.gameprocessor;
 import java.util.LinkedList;
 
 public class Creature {
-    private String name;
-    private Integer hp;
-    private Integer ap;
-    private final LinkedList<Item> inventory;
-    private final LinkedList<Item> equipment;
+    public String name;
+    public Integer hp;
+    public Integer ap;
+    public LinkedList<Resource> inventory;
+    public LinkedList<Resource> equipment;
 
     public Creature(String name, int hp, int ap){
         this.name = name;
@@ -29,11 +29,11 @@ public class Creature {
         return hp;
     }
 
-    public LinkedList<Item> getInventory() {
+    public LinkedList<Resource> getInventory() {
         return inventory;
     }
 
-    public LinkedList<Item> getEquipment() {
+    public LinkedList<Resource> getEquipment() {
         return equipment;
     }
 

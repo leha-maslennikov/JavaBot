@@ -1,9 +1,9 @@
 package com.gameprocessor;
 
 public class UserData {
-    private Resource player;
-    private Resource room;
-    private Resource combatFlag;
+    public Resource player;
+    public Resource room;
+    public Resource combatFlag;
 
     public UserData(String userId, Creature player, Room room){
         this.player = ResourceManager.createResource(userId, player);
