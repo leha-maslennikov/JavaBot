@@ -38,7 +38,7 @@ public class GameProcessor {
                 .text(text);
         for(Resource resource: resources){
             if(resource.get() instanceof Sendable obj){
-                response.addObject(obj, resource.getId());
+                response.addObject(obj, resource.id);
             }
         }
         request.response = response.build();
@@ -59,6 +59,7 @@ public class GameProcessor {
                     case "equip" -> equip(request, resource);
                     case "unequip" -> unequip(request, resource);
                     case "open" -> open(request, resource);
+                    default -> request.response = new Response();
                 }
             }
         }
@@ -91,7 +92,7 @@ public class GameProcessor {
                 )
                 .addEnemy(new Creature("bat",3,1))
                 .build();
-        ResourceManager.createResource(
+        Resource resource = ResourceManager.createResource(
                 request.getUserId(),
                 "UserData",
                 new UserData(
@@ -155,7 +156,7 @@ public class GameProcessor {
             builder.append("\n");
             player.getInventory().add(i);
         }
-        box = new Box(box.getLongText(), "Пусто");
+        resource.update(new Box(box.getShortText(), "Пусто"));
         send(request, builder.toString());
     }
 
@@ -167,6 +168,7 @@ public class GameProcessor {
         player.getEquipment().add(resource);
         player.setHp(player.getHp() + equipment.hp);
         player.setAp(player.getAp() + equipment.ap);
+        userData.getPlayer().update(player);
         send(request, "Вы надели " + equipment.getShortText());
     }
 
@@ -178,6 +180,7 @@ public class GameProcessor {
         player.getEquipment().remove(resource);
         player.setHp(player.getHp() - equipment.hp);
         player.setAp(player.getAp() - equipment.ap);
+        userData.getPlayer().update(player);
         send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
     }
 

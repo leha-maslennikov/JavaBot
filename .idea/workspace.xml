@@ -6,18 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Global changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Actions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Actions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Creature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Creature.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Door.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/UserData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +44,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

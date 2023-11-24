@@ -54,7 +54,8 @@ public class Room {
 
         public RoomBuilder addItem(Item item){
             if(this.userId != null) {
-                this.room.getItems().add(ResourceManager.createResource(this.userId, item));
+                Resource resource = ResourceManager.createResource(this.userId, item);
+                this.room.getItems().add(resource);
             }
             return this;
         }

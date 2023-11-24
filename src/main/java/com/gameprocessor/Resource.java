@@ -26,8 +26,7 @@ public class Resource {
     }
 
     public void update(Object object){
-        Resource resource = ResourceManager.update(this, object);
-        this.id = resource.id;
+        this.id = ResourceManager.update(this, object).id;
     }
 
     public void delete(){

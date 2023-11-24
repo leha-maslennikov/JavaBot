@@ -1,11 +1,12 @@
 package com.gameprocessor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Response {
-    public String userId;
-    public String text;
-    public List<ResponseObject> objects;
+    public String userId = "";
+    public String text = "";
+    public LinkedList<ResponseObject> objects = new LinkedList<>();
 
     public static ResponseBuilder builder(){
         return new ResponseBuilder();
@@ -43,14 +44,13 @@ public class Response {
         }
 
         public ResponseBuilder addObject(Sendable obj, String callbackData){
-            response.objects.add(
-                    new ResponseObject(
-                            obj.getShortText(),
-                            obj.getLongText(),
-                            obj.getActions().getActions(),
-                            callbackData
-                    )
+            ResponseObject responseObject = new ResponseObject(
+                    obj.getShortText(),
+                    obj.getLongText(),
+                    obj.getActions().getActions(),
+                    callbackData
             );
+            response.objects.add(responseObject);
             return this;
         }
 
