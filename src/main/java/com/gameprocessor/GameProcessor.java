@@ -1,6 +1,9 @@
 package com.gameprocessor;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Класс, реализующий игровые механики.
@@ -17,9 +20,10 @@ public class GameProcessor {
 
     /**
      * Отправляет текстовое сообщение пользователю
+     * @param request запрос, на который готовится response
      * @param text текст, для пользователя
      */
-    public void send(Request request, String text){
+    private void send(Request request, String text){
         request.response = Response.builder()
                 .userId(request.getUserId())
                 .text(text)
@@ -27,25 +31,42 @@ public class GameProcessor {
     }
 
     /**
-     * Отправляет объекты пользователю, с текстом из getShortText,
-     * если пользователь выбрал объект, отправляется getLongText
-     * и действия из getActions
-     //* @param obj объекты, который будет отправлен пользователю
+     * Отправляет объекты пользователю, с текстом из getShortText
+     * @param request запрос, на который готовится response
+     * @param text текст, для пользователя
+     * @param resources объекты для отправки, должны быть Sendable
      */
-    public void send(Request request, String text, List<Resource> resources){
+    private void send(Request request, String text, List<Resource> resources){
         var response = Response.builder()
                 .userId(request.getUserId())
                 .text(text);
         for(Resource resource: resources){
             if(resource.get() instanceof Sendable obj){
-                response.addObject(obj, resource.id);
+                response.addObject(obj.getShortText(), resource.id);
             }
         }
         request.response = response.build();
     }
 
+    /**
+     * Отправляет действия объекта пользователю
+     * @param request запрос, на который готовится response
+     * @param resource объект, чьи действия отправляются, должен быть Sendable
+     */
+    private void send(Request request, Resource resource){
+        if(resource.get() instanceof Sendable obj){
+            var response = Response.builder()
+                    .userId(request.getUserId())
+                    .text(obj.getLongText());
+            for(String action: obj.getActions().getActions()){
+                response.addObject(action, resource.id+":"+action);
+            }
+            request.response = response.build();
+        }
+    }
+
     public Response handleRequest(Request request){
-        switch (request.callbackData) {
+        switch (request.getCallbackData()) {
             case "/start" -> start(request);
             case "/inspect" -> inspect(request);
             case "/data" -> data(request);
@@ -53,8 +74,12 @@ public class GameProcessor {
             case "/retry" -> retry(request);
             case "/help" -> help(request);
             default -> {
-                Resource resource = new Resource(request.callbackData);
-                switch (request.action) {
+                String[] args = request.getCallbackData().split(":");
+                Resource resource = new Resource(args[0]+args[1]+args[2]);
+                if(args.length < 4) {
+                    send(request, resource);
+                }
+                switch (args[3]) {
                     case "loot" -> loot(request, resource);
                     case "equip" -> equip(request, resource);
                     case "unequip" -> unequip(request, resource);
@@ -66,20 +91,7 @@ public class GameProcessor {
         return request.response;
     }
 
-    public void createUser(Request request){
-
-    }
-    public void start(Request request){
-        send(request,
-                """
-                Добро пожаловать в нашу текстовую РПГ
-                Ваша задача: выбраться из подземелья
-                /inspect - осмотреть окружение
-                /data - посмотреть информацию о персонаже
-                /bag - открыть инвентарь
-                /retry - начать заново
-                /help - помощь
-            """);
+    private void createUser(Request request){
         Room room = Room.builder("Room 1")
                 .userId(request.getUserId())
                 .addItem(new Item("Sth", "Rubish"))
@@ -102,14 +114,27 @@ public class GameProcessor {
                 )
         );
     }
+    private void start(Request request){
+        send(request,
+                """
+                Добро пожаловать в нашу текстовую РПГ
+                Ваша задача: выбраться из подземелья
+                /inspect - осмотреть окружение
+                /data - посмотреть информацию о персонаже
+                /bag - открыть инвентарь
+                /retry - начать заново
+                /help - помощь
+            """);
+        createUser(request);
+    }
 
-    public void inspect(Request request){
+    private void inspect(Request request){
         UserData userData = (UserData) request.getUserData().get();
         Room room = (Room) userData.getRoom().get();
         send(request,"Вы находитесь в " + room.getName() + ":", room.getItems());
     }
 
-    public void data(Request request){
+    private void data(Request request){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         send(request,"Name: " + player.getName() +
@@ -119,7 +144,7 @@ public class GameProcessor {
         );
     }
 
-    public void help(Request request){
+    private void help(Request request){
         send(request,
                 """
                 Ваша задача: выбраться из подземелья
@@ -131,21 +156,21 @@ public class GameProcessor {
                 """);
     }
 
-    public void retry(Request request){
+    private void retry(Request request){
         start(request);
     }
 
-    public void bag(Request request){
+    private void bag(Request request){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         send(request,"В вашем инвентаре:", player.getInventory());
     }
 
-    public void take(Item item){
+    private void take(Item item){
         //TODO подбирать предметы из комнаты
     }
 
-    public void loot(Request request, Resource resource){
+    private void loot(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Box box = (Box) resource.get();
@@ -160,7 +185,7 @@ public class GameProcessor {
         send(request, builder.toString());
     }
 
-    public void equip(Request request, Resource resource){
+    private void equip(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Equipment equipment = (Equipment) resource.get();
@@ -172,7 +197,7 @@ public class GameProcessor {
         send(request, "Вы надели " + equipment.getShortText());
     }
 
-    public void unequip(Request request, Resource resource){
+    private void unequip(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Equipment equipment = (Equipment) resource.get();
@@ -216,7 +241,7 @@ public class GameProcessor {
 //        }
 //    }
 
-    public void open(Request request, Resource resource){
+    private void open(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Door door = (Door) resource.get();
         userData.room = door.getRoom();

@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Global changes">
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="ResourceManager, Response, Request">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +126,23 @@
       <option name="project" value="LOCAL" />
       <updated>1700420121619</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix">
+      <option name="closed" value="true" />
+      <created>1700825524486</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1700825524486</updated>
+    </task>
+    <task id="LOCAL-00008" summary="ResourceManager, Response, Request">
+      <option name="closed" value="true" />
+      <created>1700828550437</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1700828550437</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,6 +175,8 @@
     <MESSAGE value="Request, Response" />
     <MESSAGE value="GameProcessor::handleRequest, Response::builder" />
     <MESSAGE value="Global changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Global changes" />
+    <MESSAGE value="Fix" />
+    <MESSAGE value="ResourceManager, Response, Request" />
+    <option name="LAST_COMMIT_MESSAGE" value="ResourceManager, Response, Request" />
   </component>
 </project>

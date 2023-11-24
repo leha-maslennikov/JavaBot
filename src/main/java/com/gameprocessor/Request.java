@@ -1,11 +1,8 @@
 package com.gameprocessor;
 
-import org.apache.http.client.methods.RequestBuilder;
-
 public class Request {
     public String userId;
     public String callbackData;
-    public String action;
     public Response response;
 
     public String getUserId() {
@@ -14,10 +11,6 @@ public class Request {
 
     public String getCallbackData() {
         return callbackData;
-    }
-
-    public String getAction() {
-        return action;
     }
 
     public Resource getUserData(){
@@ -55,11 +48,6 @@ public class Request {
         public RequestBuilder callbackData(String callbackData) {
             request.callbackData = callbackData;
             return  this;
-        }
-
-        public  RequestBuilder action(String action) {
-            request.action = action;
-            return this;
         }
 
         public Request build() {

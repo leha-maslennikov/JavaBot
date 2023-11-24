@@ -18,7 +18,7 @@ public class Resource {
 
     public String getObjectClass() {
         String[] args = id.split(":");
-        return args[args.length-1];
+        return args[2];
     }
 
     public Object get(){

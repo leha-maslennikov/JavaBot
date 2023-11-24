@@ -13,15 +13,11 @@ public class Response {
     }
 
     public static class ResponseObject{
-        public String sortText;
-        public String longText;
-        public List<String> actions;
+        public String text;
         public String callbackData;
 
-        public ResponseObject(String shortText, String longText, List<String> actions, String callbackData){
-            this.sortText = shortText;
-            this.longText = longText;
-            this.actions = actions;
+        public ResponseObject(String text, String callbackData){
+            this.text = text;
             this.callbackData = callbackData;
         }
     }
@@ -43,11 +39,9 @@ public class Response {
             return this;
         }
 
-        public ResponseBuilder addObject(Sendable obj, String callbackData){
+        public ResponseBuilder addObject(String text, String callbackData){
             ResponseObject responseObject = new ResponseObject(
-                    obj.getShortText(),
-                    obj.getLongText(),
-                    obj.getActions().getActions(),
+                    text,
                     callbackData
             );
             response.objects.add(responseObject);

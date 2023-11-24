@@ -1,31 +1,28 @@
 package com.gameprocessor;
 
-import java.util.HashMap;
-
 public class ResourceManager {
-    public static final HashMap<String, Object> storage = new HashMap<>();
-    public static Resource createResource(String userId, String Id, Object object){
-        Resource resource = new Resource(userId+":"+Id, object.getClass().getName());
-        storage.put(resource.getId(), object);
-        return resource;
+    public static Storage storage = new DefaultStorage();
+    private static Integer count = 1;
+
+    public static Resource createResource(String userId, String id, Object object){
+        return storage.createResource(userId+":"+id, object);
     }
 
     public static Resource createResource(String userId, Object object) {
-        Resource resource = new Resource(userId+":"+storage.size(), object.getClass().getName());
-        storage.put(resource.getId(), object);
-        return resource;
+        synchronized (count) {
+            return storage.createResource(userId+":"+count++, object);
+        }
     }
 
     public static Object getObject(Resource resource){
-        return storage.get(resource.getId());
+        return storage.getObject(resource);
     }
 
     public static Resource update(Resource resource, Object object){
-        storage.put(resource.getId(), object);
-        return new Resource(resource.getId(), object.getClass().getName());
+        return storage.update(resource, object);
     }
 
     public static void delete(Resource resource){
-        storage.remove(resource.getId());
+        storage.delete(resource);
     }
 }
