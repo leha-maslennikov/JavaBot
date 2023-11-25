@@ -13,7 +13,7 @@ public class Resource {
 
     public String getId() {
         String[] args = id.split(":");
-        return args[0]+args[1];
+        return args[0]+":"+args[1];
     }
 
     public String getObjectClass() {

@@ -1,9 +1,6 @@
 package com.gameprocessor;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Класс, реализующий игровые механики.
@@ -75,7 +72,7 @@ public class GameProcessor {
             case "/help" -> help(request);
             default -> {
                 String[] args = request.getCallbackData().split(":");
-                Resource resource = new Resource(args[0]+args[1]+args[2]);
+                Resource resource = new Resource(args[0]+":"+args[1]+":"+args[2]);
                 if(args.length < 4) {
                     send(request, resource);
                 }
