@@ -1,5 +1,6 @@
 package com.gameprocessor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -88,7 +89,33 @@ public class GameProcessor {
         }
         return request.response;
     }
+    private List<Room> generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies){
+        List<Room> rooms = new LinkedList<>();
+        List<List<Item>> randomItems= new LinkedList<>();
+        List<List<Creature>> randomEnemies=new LinkedList<>();
+        for(int i=0;i<items.size();i++)
+        {
+            int randomNumber=((int)(Math.random()*(items.size()-i)));
+            randomItems.add(items.get(randomNumber));
+            items.remove(randomNumber);
+        }
+        for(int i=0;i<enemies.size();i++)
+        {
+            int randomNumber=((int)(Math.random()*(enemies.size()-i)));
+            randomEnemies.add(enemies.get(randomNumber));
+            enemies.remove(randomNumber);
+        }
+        rooms.add(Room.builder("Room "+1)
+                .addItems(randomItems.get(1)).build());
+        for(int i=1;i<numberOfRooms;i++)
+        {
+            rooms.add(Room.builder("Room "+i)
+                    .addItems(randomItems.get(i))
+                    .addEnemies(randomEnemies.get(i)).build());
 
+        }
+        return rooms;
+    }
     private void createUser(Request request){
         Room room = Room.builder("Room 1")
                 .userId(request.getUserId())

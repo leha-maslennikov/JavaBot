@@ -67,6 +67,25 @@ public class Room {
             }
             return this;
         }
+        public RoomBuilder addEnemies(List<Creature> enemies)
+        {
+            if(this.userId != null) {
+                for (Creature enemy : enemies) {
+                    this.room.getEnemies().add(ResourceManager.createResource(this.userId, enemy));
+                }
+            }
+            return this;
+        }
+
+        public RoomBuilder addItems(List<Item> items)
+        {
+            if(this.userId != null) {
+                for (Item item : items) {
+                    this.room.getEnemies().add(ResourceManager.createResource(this.userId, item));
+                }
+            }
+            return this;
+        }
 
         public Room build(){
             return this.room;
