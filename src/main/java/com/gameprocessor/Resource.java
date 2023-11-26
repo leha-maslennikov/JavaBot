@@ -29,8 +29,9 @@ public class Resource {
         this.id = ResourceManager.update(this, object).id;
     }
 
-    public void delete(){
+    public Resource delete(){
         ResourceManager.delete(this);
+        return this;
     }
 
     @Override

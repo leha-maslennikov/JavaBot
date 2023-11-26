@@ -76,6 +76,9 @@ public class GameProcessor {
                 case "/await" -> await(request);
                 case "/attack" -> attack(request);
                 default -> {
+                    UserData userData = (UserData) request.getUserData().get();
+                    Boolean combatFlag = (Boolean) userData.getCombatFlag().get();
+                    if(combatFlag) return new Response();
                     String[] args = request.getCallbackData().split(":");
                     Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
                     if (resource.get() instanceof Creature creature) {
@@ -162,7 +165,7 @@ public class GameProcessor {
                 )
         );
     }
-    private void start(Request request){
+    private void start(Request request) {
         send(request,
                 """
                 Добро пожаловать в нашу текстовую РПГ
@@ -204,17 +207,17 @@ public class GameProcessor {
                     """);
     }
 
-    private void retry(Request request){
+    private void retry(Request request) {
         start(request);
     }
 
-    private void bag(Request request){
+    private void bag(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         send(request,"В вашем инвентаре:", player.getInventory());
     }
 
-    private void take(Item item){
+    private void take(Item item) {
         //TODO подбирать предметы из комнаты
     }
 
@@ -281,7 +284,7 @@ public class GameProcessor {
         if(creature.getHp()==0)
         {
             builder.append("\n").append(creature.getName()).append(" повержен");
-            room.getEnemies().remove(resource);
+            room.getEnemies().remove(resource.delete());
         }
         if(room.getEnemies().isEmpty()){
             combatFlag=false;
