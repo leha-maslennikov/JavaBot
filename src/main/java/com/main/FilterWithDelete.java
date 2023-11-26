@@ -3,7 +3,9 @@ package com.main;
 import com.bot.dispatcher.Event;
 import com.bot.dispatcher.filters.Filter;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 public class FilterWithDelete implements Filter {
     private final Filter filter;
@@ -18,9 +20,10 @@ public class FilterWithDelete implements Filter {
                     if (object instanceof Message message) {
                         try {
                             event.bot.executeAsync(
-                                    DeleteMessage.builder()
+                                    EditMessageReplyMarkup.builder()
                                             .chatId(message.getChatId())
                                             .messageId(message.getMessageId())
+                                            .replyMarkup(InlineKeyboardMarkup.builder().build())
                                             .build()
                             );
                         } catch (Exception e) {
@@ -29,6 +32,7 @@ public class FilterWithDelete implements Filter {
                     }
                 }
         );
+        event.setData("msg", "");
         return true;
     }
 }
