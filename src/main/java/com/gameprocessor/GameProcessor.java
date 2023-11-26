@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Неактуально TODO
  * Класс, реализующий игровые механики.
  * Имеет в себе 2 типа публичных функций.
  * 1. публичная функция без аргументов:
@@ -63,33 +64,42 @@ public class GameProcessor {
         }
     }
 
-    public Response handleRequest(Request request){
-        switch (request.getCallbackData()) {
-            case "/start" -> start(request);
-            case "/inspect" -> inspect(request);
-            case "/data" -> data(request);
-            case "/bag" -> bag(request);
-            case "/retry" -> retry(request);
-            case "/help" -> help(request);
-            case "/await" -> await(request);
-            case "/attack" -> attack(request);
-            default -> {
-                String[] args = request.getCallbackData().split(":");
-                Resource resource = new Resource(args[0]+":"+args[1]+":"+args[2]);
-                if(args.length < 4) {
-                    send(request, resource);
-                    return request.response;
-                }
-                switch (args[3]) {
-                    case "loot" -> loot(request, resource);
-                    case "equip" -> equip(request, resource);
-                    case "unequip" -> unequip(request, resource);
-                    case "open" -> open(request, resource);
-                    default -> request.response = new Response();
+    public Response handleRequest(Request request) {
+        try {
+            switch (request.getCallbackData()) {
+                case "/start" -> start(request);
+                case "/inspect" -> inspect(request);
+                case "/data" -> data(request);
+                case "/bag" -> bag(request);
+                case "/retry" -> retry(request);
+                case "/help" -> help(request);
+                case "/await" -> await(request);
+                case "/attack" -> attack(request);
+                default -> {
+                    String[] args = request.getCallbackData().split(":");
+                    Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
+                    if (resource.get() instanceof Creature creature) {
+                        attack(request, resource);
+                        return request.response;
+                    }
+                    if (args.length < 4) {
+                        send(request, resource);
+                        return request.response;
+                    }
+                    switch (args[3]) {
+                        case "loot" -> loot(request, resource);
+                        case "equip" -> equip(request, resource);
+                        case "unequip" -> unequip(request, resource);
+                        case "open" -> open(request, resource);
+                        default -> request.response = new Response();
+                    }
                 }
             }
+            return request.response;
         }
-        return request.response;
+        catch (Exception e) {
+            return new Response();
+        }
     }
     private List<Room> generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies){
         List<Room> rooms = new LinkedList<>();
@@ -129,7 +139,18 @@ public class GameProcessor {
                                 .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
                                 .build()
                 )
-                .addEnemy(new Creature("bat",3,1))
+                .addItem(
+                        new Door(
+                                "Door",
+                                "Door to Room 2",
+                                Room.builder("Room 2")
+                                        .userId(request.getUserId())
+                                        .addEnemy(new Creature("bat",3,1))
+                                        .addEnemy(new Creature("spider", 3, 1))
+                                        .build(),
+                                request.getUserId()
+                        )
+                )
                 .build();
         Resource resource = ResourceManager.createResource(
                 request.getUserId(),
@@ -173,14 +194,14 @@ public class GameProcessor {
 
     private void help(Request request){
         send(request,
-            """
-                Ваша задача: выбраться из подземелья
-                /inspect - осмотреть окружение
-                /data - посмотреть информацию о персонаже
-                /bag - открыть инвентарь
-                /retry - начать заново
-                /help - помощь
-                """);
+                """
+                    Ваша задача: выбраться из подземелья
+                    /inspect - осмотреть окружение
+                    /data - посмотреть информацию о персонаже
+                    /bag - открыть инвентарь
+                    /retry - начать заново
+                    /help - помощь
+                    """);
     }
 
     private void retry(Request request){
@@ -244,8 +265,9 @@ public class GameProcessor {
         var response = Response.builder().userId(request.getUserId()).text("Выберете врага для атаки:");
         for(Resource resource: room.getEnemies()){
             Creature enemy = (Creature) resource.get();
-            response.addObject(enemy.getName()+" "+enemy.getHp(), resource.id);
+            response.addObject(enemy.getName()+" "+enemy.getHp()+"hp", resource.id);
         }
+        request.response = response.build();
     }
     private void attack(Request request, Resource resource)
     {
@@ -281,10 +303,11 @@ public class GameProcessor {
         for (int i=0;i<room.getEnemies().size();i++)
         {
             Creature enemy = (Creature) room.getEnemies().get(i).get();
-            builder.append(enemy.getName()).append(" наносит ").append(enemy.attack(player)).append(" урона");
+            builder.append(enemy.getName()).append(" наносит ").append(enemy.attack(player)).append(" урона\n");
             if(player.getHp()==0)
             {
-                builder.append("\nВы проиграли. Игра окончена.\n/retry - чтобы начать заново");
+                builder.append("Вы проиграли. Игра окончена.\n/retry - чтобы начать заново");
+                break;
             }
         }
         userData.getPlayer().update(player);
@@ -301,7 +324,7 @@ public class GameProcessor {
             userData.getCombatFlag().update(true);
             await(request);
             builder.append("\nНа вас напали.\n").append(request.response.text)
-                    .append("\n/attack - атаковать\n/await - пропустить ход");
+                    .append("/attack - атаковать\n/await - пропустить ход");
         }
         request.getUserData().update(userData);
         send(request, builder.toString());
