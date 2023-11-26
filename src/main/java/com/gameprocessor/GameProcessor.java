@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Неактуально TODO
  * Класс, реализующий игровые механики.
  * Имеет в себе 2 типа публичных функций.
  * 1. публичная функция без аргументов:
@@ -76,6 +77,10 @@ public class GameProcessor {
             default -> {
                 String[] args = request.getCallbackData().split(":");
                 Resource resource = new Resource(args[0]+":"+args[1]+":"+args[2]);
+                if(resource.get() instanceof Creature creature) {
+                    attack(request, resource);
+                    return request.response;
+                }
                 if(args.length < 4) {
                     send(request, resource);
                     return request.response;
