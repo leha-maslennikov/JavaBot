@@ -1,22 +1,16 @@
 package com.gameprocessor;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class UserData {
     public Resource player;
-    public List<Resource> rooms;
-    public Resource combatFlag;
-    public Resource roomId;
+    public Resource room;
+    public boolean combatFlag;
 
-    public UserData(String userId, Creature player, int roomId, List<Room>rooms){
+    public UserData(){}
+
+    public UserData(String userId, Creature player, Room room){
         this.player = ResourceManager.createResource(userId, player);
-        this.roomId=ResourceManager.createResource(userId, roomId);
-        this.combatFlag = ResourceManager.createResource(userId, false);
-        this.rooms=new LinkedList<>();
-        for (Room room : rooms) {
-            this.rooms.add(ResourceManager.createResource(userId, room));
-        }
+        this.room = ResourceManager.createResource(userId, room);
+        this.combatFlag = false;
     }
 
     public Resource getPlayer() {
@@ -24,10 +18,10 @@ public class UserData {
     }
 
     public Resource getRoom() {
-        return this.rooms.get((int)roomId.get());
+        return room;
     }
 
-    public Resource getCombatFlag() {
+    public boolean getCombatFlag() {
         return combatFlag;
     }
 }

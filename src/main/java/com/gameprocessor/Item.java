@@ -7,6 +7,11 @@ public class Item implements Sendable{
     public String name;
     public String description;
 
+    public Item() {
+        name = "";
+        description = "";
+    }
+
     public Item(String name, String description){
         this.name = name;
         this.description = description;

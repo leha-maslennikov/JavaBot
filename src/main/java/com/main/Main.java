@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.io.File;
 import java.util.LinkedList;
 
 public class Main {
@@ -61,7 +62,9 @@ public class Main {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        FilesStorage filesStorage = new FilesStorage();
+        ResourceManager.storage = filesStorage;
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(bot);

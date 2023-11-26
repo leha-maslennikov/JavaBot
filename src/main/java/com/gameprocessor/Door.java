@@ -4,6 +4,9 @@ public class Door extends Item {
     public Resource room;
     public Resource roomId;
 
+    public Door(){
+
+    }
     public Door(String name, String description, Room room, String userId){
         super(name, description);
         this.room = ResourceManager.createResource(userId, room);

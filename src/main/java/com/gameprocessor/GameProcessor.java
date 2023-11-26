@@ -98,6 +98,7 @@ public class GameProcessor {
             return request.response;
         }
         catch (Exception e) {
+            e.printStackTrace();
             return new Response();
         }
     }
@@ -203,7 +204,6 @@ public class GameProcessor {
         );
     }
     private void start(Request request){
-
         send(request,
                 """
                 Добро пожаловать в нашу текстовую РПГ
@@ -245,7 +245,8 @@ public class GameProcessor {
                     """);
     }
 
-    private void retry(Request request){
+    private void retry(Request request) {
+        ResourceManager.deleteUser(request.userId);
         start(request);
     }
 
@@ -271,6 +272,7 @@ public class GameProcessor {
             player.getInventory().add(i);
         }
         resource.update(new Box(box.getShortText(), "Пусто"));
+        userData.getPlayer().update(player);
         send(request, builder.toString());
     }
 
@@ -284,6 +286,7 @@ public class GameProcessor {
             userData.getPlayer().update(player);
         }
         else send(request, "У вас не получилось надеть " + equipment.getShortText());
+        resource.update(equipment);
     }
 
     private void unequip(Request request, Resource resource){
@@ -298,6 +301,7 @@ public class GameProcessor {
         else {
             send(request, "У вас не получилось снять " + equipment.getShortText());
         }
+        resource.update(equipment);
     }
 
     private void attack(Request request) {
@@ -315,7 +319,6 @@ public class GameProcessor {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Room room = (Room) userData.getRoom().get();
-        Boolean combatFlag = (Boolean) userData.getCombatFlag().get();
         Creature creature = (Creature) resource.get();
         StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
                 .append(player.attack(creature)).append(" урона");
@@ -323,15 +326,15 @@ public class GameProcessor {
         {
             builder.append("\n").append(creature.getName()).append(" повержен");
             room.getEnemies().remove(resource);
+            resource.delete();
         }
         if(room.getEnemies().isEmpty()){
-            combatFlag=false;
+            userData.combatFlag=false;
             builder.append("\nВсе враги побеждены");
         }
-        userData.getPlayer().update(player);
         userData.getRoom().update(room);
-        userData.getCombatFlag().update(combatFlag);
-        resource.update(creature);
+        request.getUserData().update(userData);
+        if(creature.getHp()>0) resource.update(creature);
         await(request);
         send(request, builder.append("\n").append(request.response.text).toString());
     }
@@ -358,11 +361,13 @@ public class GameProcessor {
     private void open(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Door door = (Door) resource.get();
-        userData.roomId = door.getRoomId();
-        Room room = (Room) userData.getRoom().get();
+        userData.room = door.getRoom();
+        Room room = (Room) door.getRoom().get();
+        userData.getRoom().update(room);
         StringBuilder builder = new StringBuilder("Вы вошли в ").append(room.getName());
         if(!room.getEnemies().isEmpty()) {
-            userData.getCombatFlag().update(true);
+            userData.combatFlag = true;
+            request.getUserData().update(userData);
             await(request);
             builder.append("\nНа вас напали.\n").append(request.response.text)
                     .append("/attack - атаковать\n/await - пропустить ход");

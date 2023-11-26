@@ -5,4 +5,5 @@ public interface Storage {
     Object getObject(Resource resource);
     Resource update(Resource resource, Object object);
     void delete(Resource resource);
+    void deleteUser(String userId);
 }
