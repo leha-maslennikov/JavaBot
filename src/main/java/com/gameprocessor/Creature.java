@@ -9,7 +9,7 @@ public class Creature {
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
 
-    public Creature(String name, int hp, int ap){
+    public Creature(String name, int hp, int ap) {
         this.name = name;
         this.hp = hp;
         this.ap = ap;
@@ -49,12 +49,13 @@ public class Creature {
         this.name = name;
     }
 
-    public void attack(Creature creature)
-    {
-        creature.setHp(creature.getHp()-this.getAp());
-        if(creature.hp<0)
-        {
-            creature.setHp(0);
-        }
+    public int attack(Creature creature) {
+        return creature.reciveDamage(ap);
+    }
+
+    public int reciveDamage(int ap) {
+        hp -= ap;
+        if(hp < 0) hp = 0;
+        return ap;
     }
 }

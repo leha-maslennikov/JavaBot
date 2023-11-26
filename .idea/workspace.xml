@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="ResourceManager, Response, Request" />
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Attack" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="game_processor" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -138,7 +138,31 @@
       <option name="project" value="LOCAL" />
       <updated>1700828550437</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix">
+      <option name="closed" value="true" />
+      <created>1700901978336</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1700901978336</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Equip, Spell">
+      <option name="closed" value="true" />
+      <created>1700936606685</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1700936606685</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Attack">
+      <option name="closed" value="true" />
+      <created>1700991338821</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1700991338821</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -173,6 +197,9 @@
     <MESSAGE value="Global changes" />
     <MESSAGE value="Fix" />
     <MESSAGE value="ResourceManager, Response, Request" />
-    <option name="LAST_COMMIT_MESSAGE" value="ResourceManager, Response, Request" />
+    <MESSAGE value="fix" />
+    <MESSAGE value="Equip, Spell" />
+    <MESSAGE value="Attack" />
+    <option name="LAST_COMMIT_MESSAGE" value="Attack" />
   </component>
 </project>

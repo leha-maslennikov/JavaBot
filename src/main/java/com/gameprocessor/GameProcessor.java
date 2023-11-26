@@ -21,7 +21,7 @@ public class GameProcessor {
      * @param request запрос, на который готовится response
      * @param text текст, для пользователя
      */
-    private void send(Request request, String text){
+    private static void send(Request request, String text){
         request.response = Response.builder()
                 .userId(request.getUserId())
                 .text(text)
@@ -39,7 +39,7 @@ public class GameProcessor {
                 .userId(request.getUserId())
                 .text(text);
         for(Resource resource: resources){
-            if(resource.get() instanceof Sendable obj){
+            if(resource.get() instanceof Sendable obj) {
                 response.addObject(obj.getShortText(), resource.id);
             }
         }
@@ -71,6 +71,8 @@ public class GameProcessor {
             case "/bag" -> bag(request);
             case "/retry" -> retry(request);
             case "/help" -> help(request);
+            case "/await" -> await(request);
+            case "/attack" -> attack(request);
             default -> {
                 String[] args = request.getCallbackData().split(":");
                 Resource resource = new Resource(args[0]+":"+args[1]+":"+args[2]);
@@ -149,7 +151,7 @@ public class GameProcessor {
                 /bag - открыть инвентарь
                 /retry - начать заново
                 /help - помощь
-            """);
+                """);
         createUser(request);
     }
 
@@ -171,7 +173,7 @@ public class GameProcessor {
 
     private void help(Request request){
         send(request,
-                """
+            """
                 Ваша задача: выбраться из подземелья
                 /inspect - осмотреть окружение
                 /data - посмотреть информацию о персонаже
@@ -214,67 +216,94 @@ public class GameProcessor {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Equipment equipment = (Equipment) resource.get();
-        player.getInventory().remove(resource);
-        player.getEquipment().add(resource);
-        player.setHp(player.getHp() + equipment.hp);
-        player.setAp(player.getAp() + equipment.ap);
-        userData.getPlayer().update(player);
-        send(request, "Вы надели " + equipment.getShortText());
+        if(equipment.equip(player, resource)) {
+            player.getInventory().remove(resource);
+            send(request, "Вы надели " + equipment.getShortText());
+            userData.getPlayer().update(player);
+        }
+        else send(request, "У вас не получилось надеть " + equipment.getShortText());
     }
 
     private void unequip(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Equipment equipment = (Equipment) resource.get();
-        player.getInventory().add(resource);
-        player.getEquipment().remove(resource);
-        player.setHp(player.getHp() - equipment.hp);
-        player.setAp(player.getAp() - equipment.ap);
-        userData.getPlayer().update(player);
-        send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
+        if(equipment.unequip(player, resource)) {
+            player.getInventory().add(resource);
+            send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
+            userData.getPlayer().update(player);
+        }
+        else {
+            send(request, "У вас не получилось снять " + equipment.getShortText());
+        }
     }
 
-//    public void attack(Request request, Creature creature)
-//    {
-//        send(request,"Вы атакуете "+creature.getName());
-//        player.attack(creature);
-//        send(request,creature.getName() + " получает" + player.getAp() + " урона");
-//        if(creature.getHp()==0)
-//        {
-//            send(request,creature.getName()+" повержен");
-//            room.deleteEnemy();
-//        }
-//        if(room.getEnemies().isEmpty()){
-//            combatFlag=false;
-//            send(request,"Все враги побеждены");
-//            return;
-//        }
-//        await(request);
-//    }
-//    public void await(Request request)
-//    {
-//        for (int i=0;i<room.getEnemies().size();i++)
-//        {
-//            send(request,room.getEnemies().get(i).getName()+ " атакует");
-//            room.getEnemies().get(i).attack(player);
-//            send(request,"Вы получаете" + room.getEnemies().get(i).getAp() + " урона");
-//            if(player.getHp()==0)
-//            {
-//                send(request,"Вы проиграли. Игра окончена");
-//                retry(request);
-//            }
-//        }
-//    }
+    private void attack(Request request) {
+        UserData userData = (UserData) request.getUserData().get();
+        Room room = (Room) userData.getRoom().get();
+        var response = Response.builder().userId(request.getUserId()).text("Выберете врага для атаки:");
+        for(Resource resource: room.getEnemies()){
+            Creature enemy = (Creature) resource.get();
+            response.addObject(enemy.getName()+" "+enemy.getHp(), resource.id);
+        }
+    }
+    private void attack(Request request, Resource resource)
+    {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Room room = (Room) userData.getRoom().get();
+        Boolean combatFlag = (Boolean) userData.getCombatFlag().get();
+        Creature creature = (Creature) resource.get();
+        StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
+                .append(player.attack(creature)).append(" урона");
+        if(creature.getHp()==0)
+        {
+            builder.append("\n").append(creature.getName()).append(" повержен");
+            room.getEnemies().remove(resource);
+        }
+        if(room.getEnemies().isEmpty()){
+            combatFlag=false;
+            builder.append("\nВсе враги побеждены");
+        }
+        userData.getPlayer().update(player);
+        userData.getRoom().update(room);
+        userData.getCombatFlag().update(combatFlag);
+        resource.update(creature);
+        await(request);
+        send(request, builder.append("\n").append(request.response.text).toString());
+    }
+    private void await(Request request)
+    {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Room room = (Room) userData.getRoom().get();
+        StringBuilder builder = new StringBuilder();
+        for (int i=0;i<room.getEnemies().size();i++)
+        {
+            Creature enemy = (Creature) room.getEnemies().get(i).get();
+            builder.append(enemy.getName()).append(" наносит ").append(enemy.attack(player)).append(" урона");
+            if(player.getHp()==0)
+            {
+                builder.append("\nВы проиграли. Игра окончена.\n/retry - чтобы начать заново");
+            }
+        }
+        userData.getPlayer().update(player);
+        send(request, builder.toString());
+    }
 
     private void open(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Door door = (Door) resource.get();
         userData.room = door.getRoom();
-//        if(!room.getEnemies().isEmpty()){
-//            combatFlag = true;
-//            send(request,"На вас напали.");
-//            await(request);
-//            send(request,"/attack - атаковать\n/await - пропустить ход");
-//        }
+        Room room = (Room) door.getRoom().get();
+        StringBuilder builder = new StringBuilder("Вы вошли в ").append(room.getName());
+        if(!room.getEnemies().isEmpty()) {
+            userData.getCombatFlag().update(true);
+            await(request);
+            builder.append("\nНа вас напали.\n").append(request.response.text)
+                    .append("\n/attack - атаковать\n/await - пропустить ход");
+        }
+        request.getUserData().update(userData);
+        send(request, builder.toString());
     }
 }

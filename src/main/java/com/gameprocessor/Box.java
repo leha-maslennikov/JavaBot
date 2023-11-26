@@ -16,9 +16,9 @@ public class Box extends Item{
 
     @Override
     public Actions getActions() {
-        return Actions.builder()
-                .addAction("loot")
-                .build();
+         var actions = Actions.builder();
+         if(!items.isEmpty()) actions.addAction("loot");
+         return actions.build();
     }
 
     public static BoxBuilder builder(String name, String description){

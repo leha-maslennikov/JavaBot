@@ -3,34 +3,37 @@ package com.gameprocessor;
 public class Equipment extends Item{
     public Integer hp;
     public Integer ap;
+    public boolean equiped;
     public Equipment(String name, String description, int hp, int ap) {
         super(name, description);
         this.hp = hp;
         this.ap = ap;
+        this.equiped = false;
     }
 
-//    public void equip(Resource resource) {
-//        if(resource.get() instanceof Creature creature) {
-//            creature.getEquipment().add();
-//            creature.setHp(creature.getHp() + hp);
-//            creature.setAp(creature.getAp() + ap);
-//        }
-//    }
-//
-//    public void unequip(Creature creature) {
-//        if(creature.getEquipment().contains(this)) {
-//            creature.getEquipment().remove(this);
-//            creature.getInventory().add(this);
-//            creature.setHp(creature.getHp() - hp);
-//            creature.setAp(creature.getAp() - ap);
-//        }
-//    }
+    public boolean equip(Creature creature, Resource resource) {
+        if(creature.getEquipment().contains(resource)) return false;
+        creature.getEquipment().add(resource);
+        creature.setHp(creature.getHp() + hp);
+        creature.setAp(creature.getAp() + ap);
+        equiped = true;
+        return true;
+    }
+
+    public boolean unequip(Creature creature, Resource resource) {
+        if(!creature.getEquipment().contains(resource)) return false;
+        creature.getEquipment().remove(resource);
+        creature.setHp(creature.getHp() - hp);
+        creature.setAp(creature.getAp() - ap);
+        equiped = false;
+        return true;
+    }
 
     @Override
     public Actions getActions() {
-        return Actions.builder()
-                .addAction("equip")
-                .addAction("unequip")
-                .build();
+        var actions = Actions.builder();
+        if(equiped) actions.addAction("unequip");
+        else actions.addAction("equip");
+        return  actions.build();
     }
 }
