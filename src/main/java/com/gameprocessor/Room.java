@@ -81,11 +81,25 @@ public class Room {
         {
             if(this.userId != null) {
                 for (Item item : items) {
-                    this.room.getEnemies().add(ResourceManager.createResource(this.userId, item));
+                    Resource resource = ResourceManager.createResource(this.userId, item);
+                    this.room.getItems().add(resource);
                 }
             }
             return this;
         }
+        public RoomBuilder addDoors(List<Integer> roomsId)
+        {
+            if(this.userId != null) {
+                for (int roomId : roomsId) {
+
+                    Resource resource = ResourceManager.createResource(this.userId, new Door("Door","Door to room "+(roomId+1),roomId,userId));
+                    this.room.getItems().add(resource);
+                }
+            }
+            return this;
+        }
+
+
 
         public Room build(){
             return this.room;

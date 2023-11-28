@@ -101,35 +101,54 @@ public class GameProcessor {
             return new Response();
         }
     }
-    private List<Room> generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies){
+    private List<Room> generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies,Request request){
         List<Room> rooms = new LinkedList<>();
         List<List<Item>> randomItems= new LinkedList<>();
         List<List<Creature>> randomEnemies=new LinkedList<>();
-        for(int i=0;i<items.size();i++)
+        List<List<Integer>>doorsId=new LinkedList<>();
+        while(!items.isEmpty())
         {
-            int randomNumber=((int)(Math.random()*(items.size()-i)));
+            int randomNumber=((int)(Math.random()*(items.size())));
             randomItems.add(items.get(randomNumber));
             items.remove(randomNumber);
         }
-        for(int i=0;i<enemies.size();i++)
+        while(!enemies.isEmpty())
         {
-            int randomNumber=((int)(Math.random()*(enemies.size()-i)));
+            int randomNumber=((int)(Math.random()*(enemies.size())));
             randomEnemies.add(enemies.get(randomNumber));
             enemies.remove(randomNumber);
         }
+        doorsId.add(new LinkedList<>());
+        for (int i=1;i<numberOfRooms;i++)
+        {
+            doorsId.add(new LinkedList<>());
+            int randomRoom=((int)(Math.random()*i));
+            doorsId.get(i).add(randomRoom);
+            doorsId.get(randomRoom).add(i);
+        }
+
+
+
+
         rooms.add(Room.builder("Room "+1)
-                .addItems(randomItems.get(1)).build());
+                .userId(request.getUserId())
+                .addDoors(doorsId.get(0))
+                .addItems(randomItems.get(0)).build());
         for(int i=1;i<numberOfRooms;i++)
         {
-            rooms.add(Room.builder("Room "+i)
+            rooms.add(Room.builder("Room "+(i+1))
+                    .userId(request.getUserId())
                     .addItems(randomItems.get(i))
-                    .addEnemies(randomEnemies.get(i)).build());
+                    .addDoors(doorsId.get(i))
+                    .addEnemies(randomEnemies.get(i-1)).build());
 
         }
+
         return rooms;
     }
     private void createUser(Request request){
-        Room room = Room.builder("Room 1")
+        //List<Room>rooms=new LinkedList<>();
+        /*rooms.add(Room.builder("Room 1")
                 .userId(request.getUserId())
                 .addItem(new Item("Sth", "Rubish"))
                 .addItem(
@@ -151,18 +170,40 @@ public class GameProcessor {
                                 request.getUserId()
                         )
                 )
-                .build();
+                .build());*/
+        List<List<Item>>items=new LinkedList<>();
+        List<List<Creature>>enemies=new LinkedList<>();
+
+        items.add(new LinkedList<>());
+        for(int i=0;i<4;i++)
+        {
+            items.add(new LinkedList<>());
+            enemies.add(new LinkedList<>());
+
+        }
+        items.get(0).add( Box.builder("Chest", "Old chest")
+                .userId(request.getUserId())
+                .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
+                .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
+                .build());
+        enemies.get(0).add(new Creature("bat",3,1));
+        enemies.get(1).add((new Creature("spider", 3, 1)));
+
+        List<Room> rooms=generateFloor(5,items,enemies,request);
+
         Resource resource = ResourceManager.createResource(
                 request.getUserId(),
                 "UserData",
                 new UserData(
                         request.getUserId(),
                         new Creature("player",10,1),
-                        room
+                        0,
+                        rooms
                 )
         );
     }
     private void start(Request request){
+
         send(request,
                 """
                 Добро пожаловать в нашу текстовую РПГ
@@ -317,8 +358,8 @@ public class GameProcessor {
     private void open(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Door door = (Door) resource.get();
-        userData.room = door.getRoom();
-        Room room = (Room) door.getRoom().get();
+        userData.roomId = door.getRoomId();
+        Room room = (Room) userData.getRoom().get();
         StringBuilder builder = new StringBuilder("Вы вошли в ").append(room.getName());
         if(!room.getEnemies().isEmpty()) {
             userData.getCombatFlag().update(true);
