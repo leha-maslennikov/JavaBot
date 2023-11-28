@@ -3,6 +3,7 @@ package com.gameprocessor;
 public class Resource {
     public String id;
 
+    public Resource(){}
     public Resource(String id){
         this.id = id;
     }
@@ -11,9 +12,13 @@ public class Resource {
         this.id = id+":"+objectClass;
     }
 
-    public String getId() {
+    public String getUserId() {
         String[] args = id.split(":");
-        return args[0]+":"+args[1];
+        return args[0];
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getObjectClass() {
@@ -26,12 +31,11 @@ public class Resource {
     }
 
     public void update(Object object){
-        this.id = ResourceManager.update(this, object).id;
+        ResourceManager.update(this, object);
     }
 
-    public Resource delete(){
+    public void delete(){
         ResourceManager.delete(this);
-        return this;
     }
 
     @Override

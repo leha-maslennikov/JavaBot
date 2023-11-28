@@ -26,7 +26,7 @@ public class ResourceManager {
         storage.delete(resource);
     }
 
-    public static void delete(String userId) {
-
+    public static void deleteUser(String userId) {
+        storage.deleteUser(userId);
     }
 }

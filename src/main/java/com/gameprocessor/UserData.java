@@ -3,12 +3,14 @@ package com.gameprocessor;
 public class UserData {
     public Resource player;
     public Resource room;
-    public Resource combatFlag;
+    public boolean combatFlag;
+
+    public UserData(){}
 
     public UserData(String userId, Creature player, Room room){
         this.player = ResourceManager.createResource(userId, player);
         this.room = ResourceManager.createResource(userId, room);
-        this.combatFlag = ResourceManager.createResource(userId, false);
+        this.combatFlag = false;
     }
 
     public Resource getPlayer() {
@@ -19,7 +21,7 @@ public class UserData {
         return room;
     }
 
-    public Resource getCombatFlag() {
+    public boolean getCombatFlag() {
         return combatFlag;
     }
 }

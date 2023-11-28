@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Box extends Item{
     public List<Resource> items;
+
+    public Box() {
+        super();
+        items = new LinkedList<>();
+    }
     public Box(String name, String description) {
         super(name, description);
         this.items = new LinkedList<>();

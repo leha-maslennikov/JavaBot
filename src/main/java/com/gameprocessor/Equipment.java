@@ -4,6 +4,8 @@ public class Equipment extends Item{
     public Integer hp;
     public Integer ap;
     public boolean equiped;
+
+    public Equipment(){}
     public Equipment(String name, String description, int hp, int ap) {
         super(name, description);
         this.hp = hp;
