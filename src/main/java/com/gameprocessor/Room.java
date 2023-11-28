@@ -9,6 +9,8 @@ public class Room {
     public List<Resource> items;
     public List<Resource> enemies;
 
+    public Room(){}
+
     public Room(String name){
         this.name = name;
         this.items = new LinkedList<>();

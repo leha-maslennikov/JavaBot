@@ -9,6 +9,10 @@ public class Creature {
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
 
+    public Creature() {
+
+    }
+
     public Creature(String name, int hp, int ap) {
         this.name = name;
         this.hp = hp;

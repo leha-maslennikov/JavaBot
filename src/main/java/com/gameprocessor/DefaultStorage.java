@@ -22,4 +22,10 @@ public class DefaultStorage implements Storage{
     public void delete(Resource resource){
         storage.remove(resource.getId());
     }
+
+    public void deleteUser(String userId) {
+        for(var i: storage.keySet()) {
+            if(i.startsWith(userId)) storage.remove(i);
+        }
+    }
 }

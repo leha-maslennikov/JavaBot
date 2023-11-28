@@ -1,8 +1,11 @@
 package com.gameprocessor;
 
-public class Door extends Item{
+public class Door extends Item {
     public Resource room;
 
+    public Door(){
+
+    }
     public Door(String name, String description, Room room, String userId){
         super(name, description);
         this.room = ResourceManager.createResource(userId, room);
