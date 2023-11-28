@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello and welcome!");
+        System.out.println("/start - для начала");
         GameProcessor gameProcessor = new GameProcessor();
         LinkedList<String> callbackData = new LinkedList<>();
         while(true) {

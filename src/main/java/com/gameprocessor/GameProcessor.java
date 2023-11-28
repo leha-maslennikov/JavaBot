@@ -77,6 +77,7 @@ public class GameProcessor {
                 case "/attack" -> attack(request);
                 default -> {
                     String[] args = request.getCallbackData().split(":");
+                    if(args.length < 3) return new Response();
                     Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
                     if (resource.get() instanceof Creature creature) {
                         attack(request, resource);
