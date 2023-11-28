@@ -77,6 +77,7 @@ public class GameProcessor {
                 case "/attack" -> attack(request);
                 default -> {
                     String[] args = request.getCallbackData().split(":");
+                    if(args.length < 3) return new Response();
                     Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
                     if (resource.get() instanceof Creature creature) {
                         attack(request, resource);
@@ -102,8 +103,8 @@ public class GameProcessor {
             return new Response();
         }
     }
-    private List<Room> generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies,Request request){
-        List<Room> rooms = new LinkedList<>();
+    private Room generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies, Request request) {
+        List<Room.RoomBuilder> rooms = new LinkedList<>();
         List<List<Item>> randomItems= new LinkedList<>();
         List<List<Creature>> randomEnemies=new LinkedList<>();
         List<List<Integer>>doorsId=new LinkedList<>();
@@ -119,6 +120,7 @@ public class GameProcessor {
             randomEnemies.add(enemies.get(randomNumber));
             enemies.remove(randomNumber);
         }
+
         doorsId.add(new LinkedList<>());
         for (int i=1;i<numberOfRooms;i++)
         {
@@ -128,24 +130,26 @@ public class GameProcessor {
             doorsId.get(randomRoom).add(i);
         }
 
-
-
-
-        rooms.add(Room.builder("Room "+1)
-                .userId(request.getUserId())
-                .addDoors(doorsId.get(0))
-                .addItems(randomItems.get(0)).build());
-        for(int i=1;i<numberOfRooms;i++)
+        for(int i=0;i<numberOfRooms;i++)
         {
-            rooms.add(Room.builder("Room "+(i+1))
+            rooms.add(
+                    Room.builder("Room "+(i+1))
                     .userId(request.getUserId())
                     .addItems(randomItems.get(i))
-                    .addDoors(doorsId.get(i))
-                    .addEnemies(randomEnemies.get(i-1)).build());
-
+                    .addEnemies(randomEnemies.get(i))
+            );
         }
 
-        return rooms;
+        for(int i = 0; i < numberOfRooms; i++) {
+            for(int j: doorsId.get(i)) {
+                Room room = rooms.get(j).build();
+                rooms.get(i).addItem(
+                        new Door("Door " + j, "Door to " + room.getName(), room, request.getUserId())
+                );
+            }
+        }
+
+        return rooms.get(0).build();
     }
     private void createUser(Request request){
         //List<Room>rooms=new LinkedList<>();
@@ -175,8 +179,7 @@ public class GameProcessor {
         List<List<Item>>items=new LinkedList<>();
         List<List<Creature>>enemies=new LinkedList<>();
 
-        items.add(new LinkedList<>());
-        for(int i=0;i<4;i++)
+        for(int i=0;i<5;i++)
         {
             items.add(new LinkedList<>());
             enemies.add(new LinkedList<>());
@@ -190,7 +193,7 @@ public class GameProcessor {
         enemies.get(0).add(new Creature("bat",3,1));
         enemies.get(1).add((new Creature("spider", 3, 1)));
 
-        List<Room> rooms=generateFloor(5,items,enemies,request);
+        Room room=generateFloor(5,items,enemies,request);
 
         Resource resource = ResourceManager.createResource(
                 request.getUserId(),
@@ -198,8 +201,7 @@ public class GameProcessor {
                 new UserData(
                         request.getUserId(),
                         new Creature("player",10,1),
-                        0,
-                        rooms
+                        room
                 )
         );
     }

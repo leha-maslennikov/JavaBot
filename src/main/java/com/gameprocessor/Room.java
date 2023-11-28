@@ -25,17 +25,6 @@ public class Room {
         return items;
     }
     public List<Resource> getEnemies(){return enemies;}
-//    public void deleteEnemy()
-//    {
-//        for(int i=0;i<enemies.size();i++)
-//        {
-//            if(enemies.get(i).get().getHp()==0)
-//            {
-//                enemies.remove(i);
-//                i--;
-//            }
-//        }
-//    }
 
     public static RoomBuilder builder(String name){
         return new RoomBuilder(name);
@@ -89,19 +78,6 @@ public class Room {
             }
             return this;
         }
-        public RoomBuilder addDoors(List<Integer> roomsId)
-        {
-            if(this.userId != null) {
-                for (int roomId : roomsId) {
-
-                    Resource resource = ResourceManager.createResource(this.userId, new Door("Door","Door to room "+(roomId+1),roomId,userId));
-                    this.room.getItems().add(resource);
-                }
-            }
-            return this;
-        }
-
-
 
         public Room build(){
             return this.room;
