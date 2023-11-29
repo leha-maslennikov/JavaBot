@@ -63,7 +63,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //ResourceManager.storage = new FilesStorage();
+        ResourceManager.storage = new FilesStorage();
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(bot);

@@ -71,10 +71,11 @@ public class GameProcessor {
                 case "/inspect" -> inspect(request);
                 case "/data" -> data(request);
                 case "/bag" -> bag(request);
-                case "/retry" -> retry(request);
+                case "/retry", "/Y" -> retry(request);
                 case "/help" -> help(request);
                 case "/await" -> await(request);
                 case "/attack" -> attack(request);
+                case "/N" -> request.response = Response.builder().userId(request.getUserId()).text("Действие отменено").build();
                 default -> {
                     String[] args = request.getCallbackData().split(":");
                     if(args.length < 3) return new Response();
@@ -127,7 +128,7 @@ public class GameProcessor {
             doorsId.add(new LinkedList<>());
             int randomRoom=((int)(Math.random()*i));
             doorsId.get(i).add(randomRoom);
-            doorsId.get(randomRoom).add(i);
+            //doorsId.get(randomRoom).add(i);
         }
 
         for(int i=0;i<numberOfRooms;i++)
@@ -140,11 +141,12 @@ public class GameProcessor {
             );
         }
 
-        for(int i = 0; i < numberOfRooms; i++) {
+        int k = 1;
+        for(int i = numberOfRooms-1; i >= 0; i--) {
+            Room room = rooms.get(i).build();
             for(int j: doorsId.get(i)) {
-                Room room = rooms.get(j).build();
-                rooms.get(i).addItem(
-                        new Door("Door " + j, "Door to " + room.getName(), room, request.getUserId())
+                rooms.get(j).addItem(
+                        new Door("Door " + k++, "Door to " + room.getName(), room, request.getUserId())
                 );
             }
         }
@@ -152,30 +154,6 @@ public class GameProcessor {
         return rooms.get(0).build();
     }
     private void createUser(Request request){
-        //List<Room>rooms=new LinkedList<>();
-        /*rooms.add(Room.builder("Room 1")
-                .userId(request.getUserId())
-                .addItem(new Item("Sth", "Rubish"))
-                .addItem(
-                        Box.builder("Chest", "Old chest")
-                                .userId(request.getUserId())
-                                .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
-                                .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
-                                .build()
-                )
-                .addItem(
-                        new Door(
-                                "Door",
-                                "Door to Room 2",
-                                Room.builder("Room 2")
-                                        .userId(request.getUserId())
-                                        .addEnemy(new Creature("bat",3,1))
-                                        .addEnemy(new Creature("spider", 3, 1))
-                                        .build(),
-                                request.getUserId()
-                        )
-                )
-                .build());*/
         List<List<Item>>items=new LinkedList<>();
         List<List<Creature>>enemies=new LinkedList<>();
 
@@ -205,7 +183,16 @@ public class GameProcessor {
                 )
         );
     }
-    private void start(Request request){
+    private void start(Request request) {
+        if(ResourceManager.hasUser(request.getUserId())) {
+            var response = Response.builder()
+                    .userId(request.getUserId())
+                    .text("Игра запущена. Хотите начать заново?");
+            response.addObject("Да", "/Y");
+            response.addObject("Нет", "/N");
+            request.response = response.build();
+            return;
+        }
         send(request,
                 """
                 Добро пожаловать в нашу текстовую РПГ

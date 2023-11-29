@@ -1,13 +1,16 @@
 package com.gameprocessor;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class DefaultStorage implements Storage{
+public class DefaultStorage implements Storage {
     private final HashMap<String, Object> storage = new HashMap<>();
-    public Resource createResource(String id, Object object){
-        Resource resource = new Resource(id, object.getClass().getName());
-        storage.put(resource.getId(), object);
-        return resource;
+    public Resource createResource(String id, Object object) {
+        synchronized (storage) {
+            Resource resource = new Resource(id, object.getClass().getName());
+            storage.put(resource.getId(), object);
+            return resource;
+        }
     }
 
     public Object getObject(Resource resource){
@@ -15,17 +18,29 @@ public class DefaultStorage implements Storage{
     }
 
     public Resource update(Resource resource, Object object){
-        storage.put(resource.getId(), object);
-        return new Resource(resource.getId(), object.getClass().getName());
+        synchronized (storage) {
+            storage.put(resource.getId(), object);
+            return new Resource(resource.getId(), object.getClass().getName());
+        }
     }
 
     public void delete(Resource resource){
-        storage.remove(resource.getId());
+        synchronized (storage) {
+            storage.remove(resource.getId());
+        }
     }
 
     public void deleteUser(String userId) {
-        for(var i: storage.keySet()) {
-            if(i.startsWith(userId)) storage.remove(i);
+        synchronized (storage) {
+            storage.keySet().removeIf(s -> s.startsWith(userId));
         }
+    }
+
+    @Override
+    public boolean hasUser(String userId) {
+        for(var i: storage.keySet()) {
+            if(i.startsWith(userId)) return true;
+        }
+        return false;
     }
 }

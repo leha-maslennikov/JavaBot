@@ -29,4 +29,8 @@ public class ResourceManager {
     public static void deleteUser(String userId) {
         storage.deleteUser(userId);
     }
+
+    public static boolean hasUser(String userId) {
+        return storage.hasUser(userId);
+    }
 }

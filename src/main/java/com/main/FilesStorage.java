@@ -113,4 +113,10 @@ public class FilesStorage implements Storage {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean hasUser(String userId) {
+        File file = new File("user_data", userId);
+        return file.exists();
+    }
 }

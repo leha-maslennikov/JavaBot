@@ -6,4 +6,5 @@ public interface Storage {
     Resource update(Resource resource, Object object);
     void delete(Resource resource);
     void deleteUser(String userId);
+    boolean hasUser(String userId);
 }
