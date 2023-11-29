@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/DefaultStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/DefaultStorage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Storage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Storage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/main/FilesStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/main/FilesStorage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +41,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
     <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -293,6 +289,11 @@
           <properties class="java.lang.IllegalMonitorStateException" package="java.lang" />
           <option name="timeStamp" value="7" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java</url>
+          <line>209</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

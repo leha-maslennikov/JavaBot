@@ -166,10 +166,18 @@ public class GameProcessor {
         items.get(0).add( Box.builder("Chest", "Old chest")
                 .userId(request.getUserId())
                 .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
-                .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
+                .build());
+        items.get(1).add( Box.builder("Chest", "Old chest")
+                .userId(request.getUserId())
+                .addItem(new Equipment("Шлем", "Металлический шлем", 5, 1))
+                .build());
+        items.get(2).add(Box.builder("Chest", "Old chest")
+                .userId(request.getUserId())
+                .addItem(new Equipment("armor", "Iron armor", 10, 1))
                 .build());
         enemies.get(0).add(new Creature("bat",3,1));
         enemies.get(1).add((new Creature("spider", 3, 1)));
+        enemies.get(2).add(new Creature("slime",5,1));
 
         Room room=generateFloor(5,items,enemies,request);
 
