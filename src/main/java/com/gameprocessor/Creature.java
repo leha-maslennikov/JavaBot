@@ -6,6 +6,7 @@ public class Creature {
     public String name;
     public Integer hp;
     public Integer ap;
+    public Integer exp;
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
 
@@ -13,10 +14,11 @@ public class Creature {
 
     }
 
-    public Creature(String name, int hp, int ap) {
+    public Creature(String name, int hp, int ap,int exp) {
         this.name = name;
         this.hp = hp;
         this.ap = ap;
+        this.exp = exp;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
     }
@@ -39,6 +41,10 @@ public class Creature {
 
     public LinkedList<Resource> getEquipment() {
         return equipment;
+    }
+
+    public Integer getExp() {
+        return this.exp;
     }
 
     public void setHp(Integer hp) {
