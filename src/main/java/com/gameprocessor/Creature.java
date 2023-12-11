@@ -5,6 +5,7 @@ import java.util.LinkedList;
 public class Creature {
     public String name;
     public Integer hp;
+    public Integer maxHp;
     public Integer ap;
     public Integer exp;
     public LinkedList<Resource> inventory;
@@ -16,6 +17,7 @@ public class Creature {
 
     public Creature(String name, int hp, int ap,int exp) {
         this.name = name;
+        this.maxHp = hp;
         this.hp = hp;
         this.ap = ap;
         this.exp = exp;
@@ -34,6 +36,7 @@ public class Creature {
     public Integer getHp() {
         return hp;
     }
+    public Integer getMaxHp(){return maxHp;}
 
     public LinkedList<Resource> getInventory() {
         return inventory;
@@ -47,9 +50,15 @@ public class Creature {
         return this.exp;
     }
 
-    public void setHp(Integer hp) {
+    public void setHp(Integer hp)
+    {
         this.hp = hp;
+        if (this.hp > this.maxHp)
+        {
+            this.hp = this.maxHp;
+        }
     }
+    public void setMaxHp(Integer maxHp){this.maxHp = maxHp;}
 
     public void setAp(Integer ap) {
         this.ap = ap;
