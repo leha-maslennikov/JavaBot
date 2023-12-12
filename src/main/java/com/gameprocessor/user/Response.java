@@ -1,12 +1,13 @@
-package com.gameprocessor;
+package com.gameprocessor.user;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Response {
     public String userId = "";
     public String text = "";
     public LinkedList<ResponseObject> objects = new LinkedList<>();
+
+    private Response(){}
 
     public static ResponseBuilder builder(){
         return new ResponseBuilder();

@@ -1,7 +1,6 @@
-package com.gameprocessor;
+package com.gameprocessor.resourcemanager;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class DefaultStorage implements Storage {
     private final HashMap<String, Object> storage = new HashMap<>();

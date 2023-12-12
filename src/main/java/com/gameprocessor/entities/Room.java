@@ -1,4 +1,9 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
+
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.items.Item;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,6 +1,8 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
 
-public class Spell implements Sendable{
+import com.gameprocessor.entities.items.Sendable;
+
+public class Spell implements Sendable {
     public int ap;
 
     public Spell(int ap) {
@@ -11,7 +13,7 @@ public class Spell implements Sendable{
      * @return текст, который будет отправлен пользователю вместе с объектом
      */
     @Override
-    public String getShortText() {
+    public String getName() {
         return null;
     }
 
@@ -19,7 +21,7 @@ public class Spell implements Sendable{
      * @return текст, который будет отправлен пользователю, после того, как он выберет данный объект
      */
     @Override
-    public String getLongText() {
+    public String getDescription() {
         return null;
     }
 

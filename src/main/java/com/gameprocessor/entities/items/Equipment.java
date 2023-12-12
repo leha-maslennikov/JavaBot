@@ -1,11 +1,20 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.items;
+
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.resourcemanager.Resource;
 
 public class Equipment extends Item{
     public Integer hp;
     public Integer ap;
     public boolean equiped;
 
-    public Equipment(){}
+    public Equipment() {
+        super();
+        this.ap = 0;
+        this.hp = 0;
+        this.equiped = false;
+    }
     public Equipment(String name, String description, int hp, int ap) {
         super(name, description);
         this.hp = hp;

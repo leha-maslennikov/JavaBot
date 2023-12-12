@@ -1,4 +1,6 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
+
+import com.gameprocessor.entities.items.Item;
 
 import java.util.LinkedList;
 

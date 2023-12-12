@@ -1,16 +1,20 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.items;
+
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Box extends Item{
+public class Box extends Item {
     public List<Resource> items;
 
     public Box() {
         super();
         items = new LinkedList<>();
     }
-    public Box(String name, String description) {
+    private Box(String name, String description) {
         super(name, description);
         this.items = new LinkedList<>();
     }
@@ -42,8 +46,9 @@ public class Box extends Item{
             if(this.userId == null) this.userId = userId;
             return this;
         }
-        public BoxBuilder addItem(Item item){
-            if(this.userId != null) this.box.getItems().add(ResourceManager.createResource(this.userId, item));
+        public BoxBuilder addItem(Item item) {
+            if(this.userId == null) throw new RuntimeException("No userId");
+            this.box.getItems().add(ResourceManager.createResource(this.userId, item));
             return this;
         }
 

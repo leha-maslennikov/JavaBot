@@ -1,4 +1,4 @@
-package com.gameprocessor;
+package com.gameprocessor.resourcemanager;
 
 public class ResourceManager {
     public static Storage storage = new DefaultStorage();

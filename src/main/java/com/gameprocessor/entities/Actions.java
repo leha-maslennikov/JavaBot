@@ -1,4 +1,4 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class Actions {
     public static ActionsBuilder builder(){
         return new ActionsBuilder();
     }
-    public static class ActionsBuilder{
+    public static class ActionsBuilder {
         private final Actions actions;
 
         public ActionsBuilder(){

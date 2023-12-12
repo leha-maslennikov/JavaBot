@@ -2,7 +2,15 @@ package com.main;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gameprocessor.*;
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.items.Box;
+import com.gameprocessor.entities.items.Door;
+import com.gameprocessor.entities.items.Equipment;
+import com.gameprocessor.entities.items.Item;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.Storage;
+import com.gameprocessor.entities.*;
+import com.gameprocessor.user.UserData;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

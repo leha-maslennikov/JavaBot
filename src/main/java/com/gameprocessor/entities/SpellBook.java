@@ -1,26 +1,34 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
 
-import java.util.List;
+import com.gameprocessor.entities.items.Sendable;
 
-/**
- * Интерфейс представляет объект,
- * который можно отправить пользователю.
- * Отправленный объект пользователь
- * может выбрать.
- */
-public interface Sendable{
+import java.util.LinkedList;
+
+public class SpellBook implements Sendable {
+
+    public LinkedList<Spell> spells;
+
     /**
      * @return текст, который будет отправлен пользователю вместе с объектом
      */
-    String getShortText();
+    @Override
+    public String getName() {
+        return "Книга заклинаний";
+    }
 
     /**
      * @return текст, который будет отправлен пользователю, после того, как он выберет данный объект
      */
-    String getLongText();
+    @Override
+    public String getDescription() {
+        return "Вы можете применить:";
+    }
 
     /**
      * @return действия, которые можно проделать с объектом, после его выбора, должны быть реализованы в GameProcessor
      */
-    Actions getActions();
+    @Override
+    public Actions getActions() {
+        return null;
+    }
 }

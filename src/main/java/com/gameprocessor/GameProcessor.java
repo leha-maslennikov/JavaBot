@@ -1,5 +1,16 @@
 package com.gameprocessor;
 
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.creatures.Dwarf;
+import com.gameprocessor.entities.creatures.Human;
+import com.gameprocessor.entities.items.*;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
+import com.gameprocessor.entities.*;
+import com.gameprocessor.user.Request;
+import com.gameprocessor.user.Response;
+import com.gameprocessor.user.UserData;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +27,7 @@ import java.util.List;
  *      которой совершается с этим объектом
  */
 public class GameProcessor {
+    public static final Creature[] races = new Creature[]{new Dwarf(), new Human()};
 
     /**
      * Отправляет текстовое сообщение пользователю
@@ -30,7 +42,7 @@ public class GameProcessor {
     }
 
     /**
-     * Отправляет объекты пользователю, с текстом из getShortText
+     * Отправляет объекты пользователю, с текстом из getName
      * @param request запрос, на который готовится response
      * @param text текст, для пользователя
      * @param resources объекты для отправки, должны быть Sendable
@@ -41,7 +53,7 @@ public class GameProcessor {
                 .text(text);
         for(Resource resource: resources){
             if(resource.get() instanceof Sendable obj) {
-                response.addObject(obj.getShortText(), resource.id);
+                response.addObject(obj.getName(), "/use " + resource.getId());
             }
         }
         request.response = response.build();
@@ -56,9 +68,9 @@ public class GameProcessor {
         if(resource.get() instanceof Sendable obj){
             var response = Response.builder()
                     .userId(request.getUserId())
-                    .text(obj.getLongText());
+                    .text(obj.getDescription());
             for(String action: obj.getActions().getActions()){
-                response.addObject(action, resource.id+":"+action);
+                response.addObject(action, "/" + action + " " + resource.getId());
             }
             request.response = response.build();
         }
@@ -66,7 +78,9 @@ public class GameProcessor {
 
     public Response handleRequest(Request request) {
         try {
-            switch (request.getCallbackData()) {
+            GameCommand command = new GameCommand(request.getCallbackData());
+
+            switch (command.getCommand()) {
                 case "/start" -> start(request);
                 case "/inspect" -> inspect(request);
                 case "/data" -> data(request);
@@ -78,7 +92,7 @@ public class GameProcessor {
                 case "/N" -> request.response = Response.builder().userId(request.getUserId()).text("Действие отменено").build();
                 default -> {
                     String[] args = request.getCallbackData().split(":");
-                    if(args.length < 3) return new Response();
+                    if(args.length < 3) return Response.builder().build();
                     Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
                     if (resource.get() instanceof Creature creature) {
                         attack(request, resource);
@@ -93,7 +107,7 @@ public class GameProcessor {
                         case "equip" -> equip(request, resource);
                         case "unequip" -> unequip(request, resource);
                         case "open" -> open(request, resource);
-                        default -> request.response = new Response();
+                        default -> request.response = Response.builder().build();
                     }
                 }
             }
@@ -101,10 +115,10 @@ public class GameProcessor {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return new Response();
+            return Response.builder().build();
         }
     }
-    private Room generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies, Request request) {
+    private Room generateFloor(int numberOfRooms, List<List<Item>> items, List<List<Creature>> enemies, Request request) {
         List<Room.RoomBuilder> rooms = new LinkedList<>();
         List<List<Item>> randomItems= new LinkedList<>();
         List<List<Creature>> randomEnemies=new LinkedList<>();
@@ -196,7 +210,7 @@ public class GameProcessor {
             var response = Response.builder()
                     .userId(request.getUserId())
                     .text("Игра запущена. Хотите начать заново?");
-            response.addObject("Да", "/Y");
+            response.addObject("Да", "/retry");
             response.addObject("Нет", "/N");
             request.response = response.build();
             return;
@@ -205,13 +219,24 @@ public class GameProcessor {
                 """
                 Добро пожаловать в нашу текстовую РПГ
                 Ваша задача: выбраться из подземелья
-                /inspect - осмотреть окружение
-                /data - посмотреть информацию о персонаже
-                /bag - открыть инвентарь
-                /retry - начать заново
-                /help - помощь
+                /create - создание персонажа
                 """);
-        createUser(request);
+        //create(request);
+        //createUser(request);
+    }
+
+    private void create(Request request) {
+        if(ResourceManager.hasUser(request.getUserId())) {
+            start(request);
+            return;
+        }
+        var response = Response.builder().userId(request.getUserId());
+        StringBuilder text = new StringBuilder("Выберете расу");
+        for(Creature i: races) {
+            text.append("\n").append(i.getInfo());
+            response.addObject(i.getClass().getSimpleName(), "/create "+i.getName());
+        }
+        request.response = response.text(text.toString()).build();
     }
 
     private void inspect(Request request){
@@ -264,11 +289,11 @@ public class GameProcessor {
         StringBuilder builder = new StringBuilder("Вы получили:\n");
         for(Resource i: box.getItems()){
             Item item = (Item) i.get();
-            builder.append(item.getShortText());
+            builder.append(item.getName());
             builder.append("\n");
             player.getInventory().add(i);
         }
-        resource.update(new Box(box.getShortText(), "Пусто"));
+        resource.update(Box.builder(box.getName(), "Пусто").build());
         userData.getPlayer().update(player);
         send(request, builder.toString());
     }
@@ -279,10 +304,10 @@ public class GameProcessor {
         Equipment equipment = (Equipment) resource.get();
         if(equipment.equip(player, resource)) {
             player.getInventory().remove(resource);
-            send(request, "Вы надели " + equipment.getShortText());
+            send(request, "Вы надели " + equipment.getName());
             userData.getPlayer().update(player);
         }
-        else send(request, "У вас не получилось надеть " + equipment.getShortText());
+        else send(request, "У вас не получилось надеть " + equipment.getName());
         resource.update(equipment);
     }
 
@@ -292,11 +317,11 @@ public class GameProcessor {
         Equipment equipment = (Equipment) resource.get();
         if(equipment.unequip(player, resource)) {
             player.getInventory().add(resource);
-            send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
+            send(request, "Вы сняли " + equipment.getName() + " и положили в инвентарь");
             userData.getPlayer().update(player);
         }
         else {
-            send(request, "У вас не получилось снять " + equipment.getShortText());
+            send(request, "У вас не получилось снять " + equipment.getName());
         }
         resource.update(equipment);
     }

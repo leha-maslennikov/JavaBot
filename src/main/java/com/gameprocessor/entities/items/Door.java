@@ -1,10 +1,15 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.items;
+
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.entities.Room;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
 
 public class Door extends Item {
     public Resource room;
 
-    public Door(){
-
+    public Door() {
+        this.room = null;
     }
     public Door(String name, String description, Room room, String userId){
         super(name, description);
@@ -19,7 +24,7 @@ public class Door extends Item {
      * @return текст, который будет отправлен пользователю вместе с объектом
      */
     @Override
-    public String getShortText() {
+    public String getName() {
         return this.name;
     }
 
@@ -27,7 +32,7 @@ public class Door extends Item {
      * @return текст, который будет отправлен пользователю, после того, как он выберет данный объект
      */
     @Override
-    public String getLongText() {
+    public String getDescription() {
         return description;
     }
 

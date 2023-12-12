@@ -1,4 +1,9 @@
-package com.gameprocessor;
+package com.gameprocessor.user;
+
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.Room;
 
 public class UserData {
     public Resource player;

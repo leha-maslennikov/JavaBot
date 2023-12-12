@@ -1,16 +1,19 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.creatures;
+
+import com.gameprocessor.resourcemanager.Resource;
 
 import java.util.LinkedList;
 
 public class Creature {
+    public static final String info = "info";
     public String name;
-    public Integer hp;
-    public Integer ap;
+    public int hp;
+    public int ap;
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
 
     public Creature() {
-
+        this("no name", 0, 0);
     }
 
     public Creature(String name, int hp, int ap) {
@@ -25,11 +28,15 @@ public class Creature {
         return name;
     }
 
-    public Integer getAp() {
+    public String getInfo() {
+        return info;
+    }
+
+    public int getAp() {
         return ap;
     }
 
-    public Integer getHp() {
+    public int getHp() {
         return hp;
     }
 
@@ -41,11 +48,11 @@ public class Creature {
         return equipment;
     }
 
-    public void setHp(Integer hp) {
+    public void setHp(int hp) {
         this.hp = hp;
     }
 
-    public void setAp(Integer ap) {
+    public void setAp(int ap) {
         this.ap = ap;
     }
 

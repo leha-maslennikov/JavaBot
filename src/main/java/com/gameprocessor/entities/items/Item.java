@@ -1,4 +1,6 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.items;
+
+import com.gameprocessor.entities.Actions;
 
 /**
  * Игровой предмет
@@ -8,8 +10,8 @@ public class Item implements Sendable{
     public String description;
 
     public Item() {
-        name = "";
-        description = "";
+        name = "no name";
+        description = "no description";
     }
 
     public Item(String name, String description){
@@ -17,12 +19,12 @@ public class Item implements Sendable{
         this.description = description;
     }
     @Override
-    public String getShortText() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public String getLongText() {
+    public String getDescription() {
         return name+"\n"+description;
     }
 

@@ -1,4 +1,4 @@
-package com.gameprocessor;
+package com.gameprocessor.resourcemanager;
 
 public interface Storage {
     Resource createResource(String Id, Object object);

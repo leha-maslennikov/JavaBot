@@ -9,6 +9,9 @@ import com.bot.dispatcher.filters.State;
 import com.bot.dispatcher.handlers.CallbackQueryHandler;
 import com.bot.dispatcher.handlers.MessageHandler;
 import com.gameprocessor.*;
+import com.gameprocessor.resourcemanager.ResourceManager;
+import com.gameprocessor.user.Request;
+import com.gameprocessor.user.Response;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,7 +20,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.io.File;
 import java.util.LinkedList;
 
 public class Main {
