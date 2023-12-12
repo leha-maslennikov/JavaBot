@@ -107,6 +107,9 @@ public class GameProcessor {
                         case "equip" -> equip(request, resource);
                         case "unequip" -> unequip(request, resource);
                         case "open" -> open(request, resource);
+                        case "use" -> use(request,resource);
+                        case "raiseHp" -> raiseHp(request);
+                        case "raiseAp" -> raiseAp(request);
                         default -> request.response = Response.builder().build();
                     }
                 }
@@ -200,8 +203,9 @@ public class GameProcessor {
                 "UserData",
                 new UserData(
                         request.getUserId(),
-                        new Creature("player",10,1),
-                        room
+                        new Creature("player",10,1,0),
+                        room,
+                        new LevelManager()
                 )
         );
     }
@@ -248,9 +252,13 @@ public class GameProcessor {
     private void data(Request request){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
+        LevelManager levelManager =  (LevelManager) userData.getLevelManager().get();
         send(request,"Name: " + player.getName() +
-                "\nHp: " + player.getHp() +
+                "\nHp: " + player.getHp()  + "/" + player.getMaxHp() +
                 "\nAp: " + player.getAp() +
+                "\nExp: " + levelManager.getExp() +
+                "\nLevel: " + levelManager.getLevel() +
+                "\nNext level: " + levelManager.getNextLevel() +
                 "\nЭкипировано:", player.getEquipment()
         );
     }
@@ -342,11 +350,13 @@ public class GameProcessor {
         Creature player = (Creature) userData.getPlayer().get();
         Room room = (Room) userData.getRoom().get();
         Creature creature = (Creature) resource.get();
+        LevelManager levelManager = (LevelManager) userData.getLevelManager().get();
         StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
                 .append(player.attack(creature)).append(" урона");
         if(creature.getHp()==0)
         {
             builder.append("\n").append(creature.getName()).append(" повержен");
+            levelManager.setExp(levelManager.getExp() + creature.getExp());
             room.getEnemies().remove(resource);
             resource.delete();
         }
@@ -359,6 +369,14 @@ public class GameProcessor {
         if(creature.getHp()>0) resource.update(creature);
         await(request);
         send(request, builder.append("\n").append(request.response.text).toString());
+        if (levelManager.getExp()>=levelManager.getNextLevel())
+        {
+            levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
+            levelManager.setLevel(levelManager.getLevel() + 1);
+            LinkedList<Resource> listLevelManager = new LinkedList<>();
+            listLevelManager.add(userData.getLevelManager());
+            send(request,"Новый уровень!", listLevelManager);
+        }
     }
     private void await(Request request)
     {
@@ -396,5 +414,32 @@ public class GameProcessor {
         }
         request.getUserData().update(userData);
         send(request, builder.toString());
+    }
+    private void raiseHp(Request request) {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        player.setMaxHp(player.getMaxHp() + 5);
+        player.setHp(player.getHp() + 5);
+        userData.getPlayer().update(player);
+        request.getUserData().update(userData);
+        send(request,"Здоровье увеличено на 5");
+    }
+    private void raiseAp(Request request) {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        player.setAp(player.getAp() + 1);
+        userData.getPlayer().update(player);
+        request.getUserData().update(userData);
+        send(request,"Урон увеличен на 1");
+    }
+    private void use(Request request, Resource resource){
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Consumable consumable = (Consumable) resource.get();
+        consumable.useConsumable(player);
+        player.getInventory().remove(resource);
+        userData.getPlayer().update(player);
+        resource.update(consumable);
+        send(request, "Вы использовали " + consumable.name);
     }
 }

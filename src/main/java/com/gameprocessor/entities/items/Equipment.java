@@ -1,8 +1,4 @@
-package com.gameprocessor.entities.items;
-
-import com.gameprocessor.entities.Actions;
-import com.gameprocessor.entities.creatures.Creature;
-import com.gameprocessor.resourcemanager.Resource;
+package com.gameprocessor;
 
 public class Equipment extends Item{
     public Integer hp;
@@ -25,6 +21,7 @@ public class Equipment extends Item{
     public boolean equip(Creature creature, Resource resource) {
         if(creature.getEquipment().contains(resource)) return false;
         creature.getEquipment().add(resource);
+        creature.setMaxHp(creature.getMaxHp() + hp);
         creature.setHp(creature.getHp() + hp);
         creature.setAp(creature.getAp() + ap);
         equiped = true;
@@ -34,6 +31,7 @@ public class Equipment extends Item{
     public boolean unequip(Creature creature, Resource resource) {
         if(!creature.getEquipment().contains(resource)) return false;
         creature.getEquipment().remove(resource);
+        creature.setMaxHp(creature.getMaxHp() - hp);
         creature.setHp(creature.getHp() - hp);
         creature.setAp(creature.getAp() - ap);
         equiped = false;

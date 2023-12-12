@@ -7,19 +7,23 @@ import java.util.LinkedList;
 public class Creature {
     public static final String info = "info";
     public String name;
-    public int hp;
-    public int ap;
+    public Integer hp;
+    public Integer maxHp;
+    public Integer ap;
+    public Integer exp;
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
 
     public Creature() {
-        this("no name", 0, 0);
+
     }
 
-    public Creature(String name, int hp, int ap) {
+    public Creature(String name, int hp, int ap,int exp) {
         this.name = name;
+        this.maxHp = hp;
         this.hp = hp;
         this.ap = ap;
+        this.exp = exp;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
     }
@@ -36,9 +40,10 @@ public class Creature {
         return ap;
     }
 
-    public int getHp() {
+    public Integer getHp() {
         return hp;
     }
+    public Integer getMaxHp(){return maxHp;}
 
     public LinkedList<Resource> getInventory() {
         return inventory;
@@ -48,11 +53,22 @@ public class Creature {
         return equipment;
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
+    public Integer getExp() {
+        return this.exp;
     }
 
-    public void setAp(int ap) {
+    public void setHp(Integer hp)
+    {
+        this.hp = hp;
+        if (this.hp > this.maxHp)
+        {
+            this.hp = this.maxHp;
+        }
+    }
+
+    public void setMaxHp(Integer maxHp){this.maxHp = maxHp;}
+
+    public void setAp(Integer ap) {
         this.ap = ap;
     }
 
