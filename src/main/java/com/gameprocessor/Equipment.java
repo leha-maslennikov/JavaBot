@@ -16,6 +16,7 @@ public class Equipment extends Item{
     public boolean equip(Creature creature, Resource resource) {
         if(creature.getEquipment().contains(resource)) return false;
         creature.getEquipment().add(resource);
+        creature.setMaxHp(creature.getMaxHp() + hp);
         creature.setHp(creature.getHp() + hp);
         creature.setAp(creature.getAp() + ap);
         equiped = true;
@@ -25,6 +26,7 @@ public class Equipment extends Item{
     public boolean unequip(Creature creature, Resource resource) {
         if(!creature.getEquipment().contains(resource)) return false;
         creature.getEquipment().remove(resource);
+        creature.setMaxHp(creature.getMaxHp() - hp);
         creature.setHp(creature.getHp() - hp);
         creature.setAp(creature.getAp() - ap);
         equiped = false;
