@@ -2,6 +2,9 @@ package com.main;
 
 import com.bot.Bot;
 import com.bot.dispatcher.Dispatcher;
+import com.bot.dispatcher.filters.Command;
+import com.bot.dispatcher.filters.State;
+import com.bot.dispatcher.handlers.MessageHandler;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -27,6 +30,26 @@ public class Main {
 
     public static Dispatcher createDispatcher(){
         Dispatcher dp = new Dispatcher();
+        dp.addHandler(
+                new MessageHandler(
+                        new Command("start"),
+                        event -> {
+                            System.out.println("start"+event.event.getText());
+                        }
+                )
+        );
+
+
+        dp.addHandler(
+                new MessageHandler(
+                        event -> {
+                            return true;
+                        },
+                        event -> {
+                            System.out.println(event.event.getText());
+                        }
+                )
+        );
 
         return dp;
     }

@@ -1,8 +1,9 @@
 package com.bot.dispatcher.filters;
 
 import com.bot.dispatcher.Event;
+import com.bot.dispatcher.handlers.BotEvent;
 
-public class State implements Filter{
+public class State implements Filter {
     
     private final String state;
 
@@ -16,16 +17,17 @@ public class State implements Filter{
 
     @Override
     public boolean call(Event event){
-        if(event.state == null) return false;
-        try{
-            Object obj = event.state.get();
-            if(obj == null) obj = "";
-            if(obj instanceof String state){
-               return this.state.equals(state);
+        if(event instanceof BotEvent botEvent) {
+            if (botEvent.state == null) return false;
+            try {
+                Object obj = botEvent.state.get();
+                if (obj == null) obj = "";
+                if (obj instanceof String state) {
+                    return this.state.equals(state);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
-        catch (Exception e){
-            e.printStackTrace();
         }
         return false;
     }

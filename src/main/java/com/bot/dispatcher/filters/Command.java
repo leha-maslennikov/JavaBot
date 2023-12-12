@@ -1,11 +1,12 @@
 package com.bot.dispatcher.filters;
 
 import com.bot.dispatcher.Event;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 /**
  * Применять только в MessageHandler
  */
-public class Command implements Filter {
+public class Command implements Filter<Message> {
     private final String command;
     
     public Command(String command){
@@ -17,8 +18,8 @@ public class Command implements Filter {
     }
 
     @Override
-    public boolean call(Event event){
-        if (!event.event.getMessage().hasText()) return false;
-        return event.event.getMessage().getText().equals(command);
+    public boolean call(Event<Message> event) {
+        if (!event.event.hasText()) return false;
+        return event.event.getText().equals(command);
     }
 }

@@ -1,5 +1,5 @@
 package com.bot.dispatcher;
 
-public interface Callback{
-    void call(Event event);
+public interface Callback<T> {
+    void call(Event<T> event);
 }

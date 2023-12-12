@@ -6,13 +6,13 @@ import com.bot.dispatcher.filters.Filter;
 import com.bot.dispatcher.handlers.BaseHandler;
 
 public class Dispatcher {
-    private Filter filter;
-    private final LinkedList<BaseHandler> handlers = new LinkedList<>();
+    private Filter<?> filter;
+    private final LinkedList<BaseHandler<?>> handlers = new LinkedList<>();
     private final LinkedList<Dispatcher> dispatchers = new LinkedList<>();
 
     public boolean call(Event event){
         if(filter != null && !filter.call(event)) return false;
-        for(BaseHandler handler: handlers){
+        for(BaseHandler<?> handler: handlers){
             if(handler.call(event)){
                 return true;
             }
@@ -28,11 +28,11 @@ public class Dispatcher {
         dispatchers.addLast(dispatcher);
     }
 
-    public void addHandler(BaseHandler handler){
+    public void addHandler(BaseHandler<?> handler){
         handlers.addLast(handler);
     }
 
-    public void addFilter(Filter filter){
+    public void addFilter(Filter<?> filter){
         this.filter = filter;
     }
 }

@@ -1,11 +1,13 @@
 package com.bot;
 
+import com.bot.dispatcher.handlers.BotEvent;
 import com.bot.storage.MemoryStorage;
 import com.bot.storage.Storage;
 import com.bot.dispatcher.Dispatcher;
 import com.bot.dispatcher.Event;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.concurrent.CompletableFuture;
@@ -75,7 +77,12 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         threadPool.execute(
                 ()->{
-                    dispatcher.call(new Event(this, update));
+                    if(update.hasMessage()) {
+                        dispatcher.call(new BotEvent<>(this, update.getMessage()));
+                    }
+                    if(update.hasCallbackQuery()) {
+                        dispatcher.call(new BotEvent<>(this, update.getCallbackQuery()));
+                    }
                 }
         );
     }

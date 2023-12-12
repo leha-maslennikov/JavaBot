@@ -11,7 +11,7 @@ public class And implements Filter {
     }
 
     @Override
-    public boolean call(Event event){
+    public boolean call(Event event) {
         for(Filter filter: filters){
             if(!filter.call(event)){
                 return false;
