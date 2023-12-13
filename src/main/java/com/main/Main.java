@@ -120,6 +120,21 @@ public class Main {
         );
 
         dp.addHandler(
+                new MessageHandler(
+                        event -> true,
+                        (event)->{
+                            Response response = gameProcessor.handleRequest(
+                                    Request.builder()
+                                            .userId(event.userId)
+                                            .callbackData(event.event.getMessage().getText())
+                                            .build()
+                            );
+                            send(event, response);
+                        }
+                )
+        );
+
+        dp.addHandler(
                 new CallbackQueryHandler(
                         new FilterWithDelete(new State("send")),
                         event -> {

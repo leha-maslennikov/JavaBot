@@ -27,7 +27,10 @@ import java.util.List;
  *      которой совершается с этим объектом
  */
 public class GameProcessor {
-    public static final Creature[] races = new Creature[]{new Dwarf(), new Human()};
+    public static final String NONE = "";
+    public static final String COMBAT = "COMBAT";
+    public static final String CREATE = "CREATE";
+    public static final Creature[] RACES = new Creature[]{new Dwarf(), new Human()};
 
     /**
      * Отправляет текстовое сообщение пользователю
@@ -53,7 +56,7 @@ public class GameProcessor {
                 .text(text);
         for(Resource resource: resources){
             if(resource.get() instanceof Sendable obj) {
-                response.addObject(obj.getName(), "/use " + resource.getId());
+                response.addObject(obj.getName(), resource.getId());
             }
         }
         request.response = response.build();
@@ -70,7 +73,7 @@ public class GameProcessor {
                     .userId(request.getUserId())
                     .text(obj.getDescription());
             for(String action: obj.getActions().getActions()){
-                response.addObject(action, "/" + action + " " + resource.getId());
+                response.addObject(action, resource.getId()+":"+action);
             }
             request.response = response.build();
         }
@@ -78,9 +81,7 @@ public class GameProcessor {
 
     public Response handleRequest(Request request) {
         try {
-            GameCommand command = new GameCommand(request.getCallbackData());
-
-            switch (command.getCommand()) {
+            switch (request.getCallbackData()) {
                 case "/start" -> start(request);
                 case "/inspect" -> inspect(request);
                 case "/data" -> data(request);
@@ -170,6 +171,7 @@ public class GameProcessor {
 
         return rooms.get(0).build();
     }
+
     private void createUser(Request request){
         List<List<Item>>items=new LinkedList<>();
         List<List<Creature>>enemies=new LinkedList<>();
@@ -192,9 +194,9 @@ public class GameProcessor {
                 .userId(request.getUserId())
                 .addItem(new Equipment("armor", "Iron armor", 10, 1))
                 .build());
-        enemies.get(0).add(new Creature("bat",3,1));
-        enemies.get(1).add((new Creature("spider", 3, 1)));
-        enemies.get(2).add(new Creature("slime",5,1));
+        enemies.get(0).add(new Creature("bat",3,1, 5));
+        enemies.get(1).add((new Creature("spider", 3, 1, 5)));
+        enemies.get(2).add(new Creature("slime",5,1, 5));
 
         Room room=generateFloor(5,items,enemies,request);
 
@@ -209,6 +211,7 @@ public class GameProcessor {
                 )
         );
     }
+
     private void start(Request request) {
         if(ResourceManager.hasUser(request.getUserId())) {
             var response = Response.builder()
@@ -225,6 +228,7 @@ public class GameProcessor {
                 Ваша задача: выбраться из подземелья
                 /create - создание персонажа
                 """);
+        createUser(request);
         //create(request);
         //createUser(request);
     }
@@ -236,7 +240,7 @@ public class GameProcessor {
         }
         var response = Response.builder().userId(request.getUserId());
         StringBuilder text = new StringBuilder("Выберете расу");
-        for(Creature i: races) {
+        for(Creature i: RACES) {
             text.append("\n").append(i.getInfo());
             response.addObject(i.getClass().getSimpleName(), "/create "+i.getName());
         }
@@ -344,8 +348,8 @@ public class GameProcessor {
         }
         request.response = response.build();
     }
-    private void attack(Request request, Resource resource)
-    {
+
+    private void attack(Request request, Resource resource) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Room room = (Room) userData.getRoom().get();
@@ -359,9 +363,10 @@ public class GameProcessor {
             levelManager.setExp(levelManager.getExp() + creature.getExp());
             room.getEnemies().remove(resource);
             resource.delete();
+            userData.getLevelManager().update(levelManager);
         }
         if(room.getEnemies().isEmpty()){
-            userData.combatFlag=false;
+            userData.state=NONE;
             builder.append("\nВсе враги побеждены");
         }
         userData.getRoom().update(room);
@@ -373,13 +378,12 @@ public class GameProcessor {
         {
             levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
             levelManager.setLevel(levelManager.getLevel() + 1);
-            LinkedList<Resource> listLevelManager = new LinkedList<>();
-            listLevelManager.add(userData.getLevelManager());
-            send(request,"Новый уровень!", listLevelManager);
+            userData.getLevelManager().update(levelManager);
+            send(request, userData.getLevelManager());
         }
     }
-    private void await(Request request)
-    {
+
+    private void await(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Room room = (Room) userData.getRoom().get();
@@ -406,7 +410,7 @@ public class GameProcessor {
         userData.getRoom().update(room);
         StringBuilder builder = new StringBuilder("Вы вошли в ").append(room.getName());
         if(!room.getEnemies().isEmpty()) {
-            userData.combatFlag = true;
+            userData.state = COMBAT;
             request.getUserData().update(userData);
             await(request);
             builder.append("\nНа вас напали.\n").append(request.response.text)
@@ -415,6 +419,7 @@ public class GameProcessor {
         request.getUserData().update(userData);
         send(request, builder.toString());
     }
+
     private void raiseHp(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
@@ -424,6 +429,7 @@ public class GameProcessor {
         request.getUserData().update(userData);
         send(request,"Здоровье увеличено на 5");
     }
+
     private void raiseAp(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
@@ -432,6 +438,7 @@ public class GameProcessor {
         request.getUserData().update(userData);
         send(request,"Урон увеличен на 1");
     }
+
     private void use(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();

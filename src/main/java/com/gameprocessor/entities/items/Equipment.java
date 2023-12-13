@@ -1,6 +1,10 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.items;
 
-public class Equipment extends Item{
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.resourcemanager.Resource;
+
+public class Equipment extends Item {
     public Integer hp;
     public Integer ap;
     public boolean equiped;

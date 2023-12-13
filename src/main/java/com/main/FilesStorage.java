@@ -2,7 +2,11 @@ package com.main;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gameprocessor.entities.items.Consumable;
+import com.gameprocessor.entities.LevelManager;
 import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.creatures.Dwarf;
+import com.gameprocessor.entities.creatures.Human;
 import com.gameprocessor.entities.items.Box;
 import com.gameprocessor.entities.items.Door;
 import com.gameprocessor.entities.items.Equipment;
@@ -28,6 +32,10 @@ public class FilesStorage implements Storage {
         classes.add(Item.class);
         classes.add(Room.class);
         classes.add(UserData.class);
+        classes.add(LevelManager.class);
+        classes.add(Consumable.class);
+        classes.add(Dwarf.class);
+        classes.add(Human.class);
     }
     @Override
     public Resource createResource(String id, Object object) {

@@ -4,36 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="fix">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Start.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Dwarf.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Human.java" afterDir="false" />
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="BotEvent">
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_10_2023_19_25__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_10_2023_19_25__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]6/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_6.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Actions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/Actions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Creature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/DefaultStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/resourcemanager/DefaultStorage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Door.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Consumable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Consumable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/Inventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/resourcemanager/Resource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/ResourceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/resourcemanager/ResourceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Sendable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Sendable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Spell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/Spell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/SpellBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/SpellBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/Storage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/resourcemanager/Storage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/LevelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/LevelManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/main/FilesStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/main/FilesStorage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/main/Main.java" afterDir="false" />
     </list>

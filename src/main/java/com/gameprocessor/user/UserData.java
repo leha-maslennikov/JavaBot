@@ -1,11 +1,14 @@
 package com.gameprocessor.user;
 
+import com.gameprocessor.GameProcessor;
+import com.gameprocessor.entities.LevelManager;
 import com.gameprocessor.resourcemanager.Resource;
 import com.gameprocessor.resourcemanager.ResourceManager;
 import com.gameprocessor.entities.creatures.Creature;
 import com.gameprocessor.entities.Room;
 
 public class UserData {
+    public String state;
     public Resource player;
     public Resource room;
     public boolean combatFlag;
@@ -13,7 +16,8 @@ public class UserData {
 
     public UserData(){}
 
-    public UserData(String userId, Creature player, Room room, LevelManager levelManager){
+    public UserData(String userId, Creature player, Room room, LevelManager levelManager) {
+        state = GameProcessor.NONE;
         this.player = ResourceManager.createResource(userId, player);
         this.room = ResourceManager.createResource(userId, room);
         this.levelManager =  ResourceManager.createResource(userId, levelManager);
