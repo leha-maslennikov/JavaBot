@@ -15,7 +15,7 @@ public class Creature {
     public LinkedList<Resource> equipment;
 
     public Creature() {
-
+        this("player", 10, 1, 0);
     }
 
     public Creature(String name, int hp, int ap,int exp) {
@@ -26,6 +26,10 @@ public class Creature {
         this.exp = exp;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
+    }
+
+    public Creature init() {
+        return new Creature("player", 10, 1, 0);
     }
 
     public String getName() {

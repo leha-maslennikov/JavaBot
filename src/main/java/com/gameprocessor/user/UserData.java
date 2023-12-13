@@ -17,7 +17,7 @@ public class UserData {
     public UserData(){}
 
     public UserData(String userId, Creature player, Room room, LevelManager levelManager) {
-        state = GameProcessor.NONE;
+        this.state = GameProcessor.NONE;
         this.player = ResourceManager.createResource(userId, player);
         this.room = ResourceManager.createResource(userId, room);
         this.levelManager =  ResourceManager.createResource(userId, levelManager);
