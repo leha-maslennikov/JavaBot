@@ -18,6 +18,10 @@ public class Command implements Filter {
 
     @Override
     public boolean call(Request event){
+        if (event.getCallbackData() == null) {
+            System.out.println(Command.class + " null");
+            return false;
+        }
         return event.getCallbackData().equals(command);
     }
 }

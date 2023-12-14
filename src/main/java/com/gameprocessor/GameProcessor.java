@@ -1,6 +1,10 @@
 package com.gameprocessor;
 
 import com.gameprocessor.dispatcher.Dispatcher;
+import com.gameprocessor.dispatcher.filters.And;
+import com.gameprocessor.dispatcher.filters.Command;
+import com.gameprocessor.dispatcher.filters.Or;
+import com.gameprocessor.dispatcher.filters.State;
 import com.gameprocessor.dispatcher.handlers.Handler;
 import com.gameprocessor.entities.creatures.Creature;
 import com.gameprocessor.entities.creatures.Dwarf;
@@ -85,44 +89,117 @@ public class GameProcessor {
         Dispatcher dp = GameDispatcher.get();
         dp.addHandler(
                 new Handler(
+                        new Command("start"),
+                        request -> {
+                            start(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Command("data"),
+                        request -> {
+                            data(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Or(
+                                new Command("retry"),
+                                new Command("Y")
+                        ),
+                        request -> {
+                            retry(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Command("help"),
+                        request -> {
+                            help(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Command("N"),
+                        request -> {
+                            request.response = Response.builder().userId(request.getUserId()).text("Действие отменено").build();
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(COMBAT),
+                                new Command("await")
+                        ),
+                        request -> {
+                            await(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(COMBAT),
+                                new Command("attack")
+                        ),
+                        request -> {
+                            attack(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(NONE),
+                                new Command("inspect")
+                        ),
+                        request -> {
+                            inspect(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(NONE),
+                                new Command("bag")
+                        ),
+                        request -> {
+                            bag(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
                         request -> true,
                         request -> {
                             try {
-                                switch (request.getCallbackData()) {
-                                    case "/start" -> start(request);
-                                    case "/inspect" -> inspect(request);
-                                    case "/data" -> data(request);
-                                    case "/bag" -> bag(request);
-                                    case "/retry", "/Y" -> retry(request);
-                                    case "/help" -> help(request);
-                                    case "/await" -> await(request);
-                                    case "/attack" -> attack(request);
-                                    case "/N" -> request.response = Response.builder().userId(request.getUserId()).text("Действие отменено").build();
-                                    default -> {
-                                        String[] args = request.getCallbackData().split(":");
-                                        if(args.length < 3) return;
-                                        Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
-                                        if (resource.get() instanceof Creature creature) {
-                                            attack(request, resource);
-                                            return;
-                                        }
-                                        if (args.length < 4) {
-                                            send(request, resource);
-                                            return;
-                                        }
-                                        switch (args[3]) {
-                                            case "loot" -> loot(request, resource);
-                                            case "equip" -> equip(request, resource);
-                                            case "unequip" -> unequip(request, resource);
-                                            case "open" -> open(request, resource);
-                                            case "use" -> use(request,resource);
-                                            case "raiseHp" -> raiseHp(request);
-                                            case "raiseAp" -> raiseAp(request);
-                                            default -> request.response = Response.builder().build();
-                                        }
+                                    String[] args = request.getCallbackData().split(":");
+                                    if(args.length < 3) return;
+                                    Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
+                                    if (resource.get() instanceof Creature creature) {
+                                        attack(request, resource);
+                                        return;
                                     }
+                                    if (args.length < 4) {
+                                        send(request, resource);
+                                        return;
+                                    }
+                                    switch (args[3]) {
+                                        case "loot" -> loot(request, resource);
+                                        case "equip" -> equip(request, resource);
+                                        case "unequip" -> unequip(request, resource);
+                                        case "open" -> open(request, resource);
+                                        case "use" -> use(request,resource);
+                                        case "raiseHp" -> raiseHp(request);
+                                        case "raiseAp" -> raiseAp(request);
+                                        default -> request.response = Response.builder().build();
                                 }
-                                return;
                             }
                             catch (Exception e) {
                                 e.printStackTrace();
@@ -229,6 +306,7 @@ public class GameProcessor {
                 .addItem(
                         Box.builder("Chest", "Old chest")
                                 .userId(request.getUserId())
+                                .addItem(new Consumable("Hp potion", "Regen 5 hp", 5))
                                 .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
                                 .build()
                 )

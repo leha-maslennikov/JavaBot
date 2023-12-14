@@ -7,6 +7,7 @@ import com.gameprocessor.entities.items.Item;
 public class Consumable extends Item {
     public Integer hp;
 
+    public Consumable(){}
     public Consumable(String name, String description, int hp) {
         super(name, description);
         this.hp = hp;

@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="GameDispatcher, Consumable, LevelManager, State">
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameDispatcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/dispatcher/filters/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/dispatcher/filters/State.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Dwarf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Dwarf.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Human.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/dispatcher/filters/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/dispatcher/filters/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Consumable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/items/Consumable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,7 +258,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702438002555</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="fix">
+      <option name="closed" value="true" />
+      <created>1702446754129</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1702446754129</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,9 +320,9 @@
     <MESSAGE value="Add CallbackQueryHandler" />
     <MESSAGE value="Attack" />
     <MESSAGE value="FilesStorage" />
-    <MESSAGE value="fix" />
     <MESSAGE value="GameDispatcher, Consumable, LevelManager, State" />
-    <option name="LAST_COMMIT_MESSAGE" value="GameDispatcher, Consumable, LevelManager, State" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
