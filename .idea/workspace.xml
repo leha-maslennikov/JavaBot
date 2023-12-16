@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="Level Manager">
+    <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="GameDispatcher, Consumable, LevelManager, State">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,11 +38,39 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="game_processor" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="SOFT" />
+    <option name="RESET_MODE" value="HARD" />
+    <option name="SET_USER_NAME_GLOBALLY" value="false" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;leha-maslennikov&quot;
+  }
+}</component>
+  <component name="GitRewordedCommitMessages">
+    <option name="commitMessagesMapping">
+      <RewordedCommitMessageMapping>
+        <option name="originalMessage" value="added Bot, Dispatcher, Chat, Storage, types and etc" />
+        <option name="rewordedMessage" value="TelegramLongPollingBot, Dispatcher, Storage, Main" />
+      </RewordedCommitMessageMapping>
+    </option>
+    <option name="currentCommit" value="1" />
+    <option name="onto" value="bf979c4b3cb51e8b95c68da9f1efff08df843c7f" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="73a33b01-9e60-4141-9edd-b60e4962ed0e" />
+        <option name="url" value="https://github.com/leha-maslennikov/JavaBot" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="HierarchyBrowserManager">
+    <option name="SCOPE" value="All" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -56,17 +84,78 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;cl__game__processor&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;D:/ООП/JavaBot/src/main/java/com/main/Main.java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "cl__game__processor",
+    "last_opened_file_path": "D:/ООП/JavaBot/src/main/java/com/gameprocessor",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "D:/ООП/JavaBot/src/main/java/com/main/Main.java",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "File.Encoding",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ООП\JavaBot\src\main\java\com\gameprocessor" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.main.Main" />
+      <module name="JavaBot.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JavaBot [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.JavaBot [dependencies]" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Gradle.JavaBot [dependencies]" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Gradle.JavaBot [dependencies]" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -75,140 +164,120 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1697291739172</updated>
-      <workItem from="1697291739873" duration="46000" />
+      <workItem from="1697291739873" duration="4453000" />
+      <workItem from="1697963370366" duration="8820000" />
     </task>
-    <task id="LOCAL-00001" summary="GameProcessor::bag">
+    <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
-      <created>1699700231854</created>
+      <created>1697292783590</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1699700231854</updated>
+      <updated>1697292783590</updated>
     </task>
-    <task id="LOCAL-00002" summary="fix Equipment::equip/unequip">
+    <task id="LOCAL-00002" summary="changed Bot using Thread, DefaultChat can used in threads">
       <option name="closed" value="true" />
-      <created>1699700499873</created>
+      <created>1697361545595</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1699700499873</updated>
+      <updated>1697361545595</updated>
     </task>
-    <task id="LOCAL-00003" summary="ResourceManager, Resource">
+    <task id="LOCAL-00003" summary="changed Bot using Thread, DefaultChat can used in threads">
       <option name="closed" value="true" />
-      <created>1700401993129</created>
+      <created>1697963962178</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1700401993129</updated>
+      <updated>1697963962178</updated>
     </task>
-    <task id="LOCAL-00004" summary="Request, Response">
+    <task id="LOCAL-00004" summary="TelegramLongPollingBot, Dispatcher, Storage, Main">
       <option name="closed" value="true" />
-      <created>1700402869736</created>
+      <created>1699172608264</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1700402869736</updated>
+      <updated>1699172608265</updated>
     </task>
-    <task id="LOCAL-00005" summary="GameProcessor::handleRequest, Response::builder">
+    <task id="LOCAL-00005" summary="TelegramLongPollingBot, Dispatcher, Storage, Main">
       <option name="closed" value="true" />
-      <created>1700404006019</created>
+      <created>1699173206569</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1700404006019</updated>
+      <updated>1699173206570</updated>
     </task>
-    <task id="LOCAL-00006" summary="Global changes">
+    <task id="LOCAL-00006" summary="Start handlers">
       <option name="closed" value="true" />
-      <created>1700420121619</created>
+      <created>1699186796850</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1700420121619</updated>
+      <updated>1699186796850</updated>
     </task>
-    <task id="LOCAL-00007" summary="Fix">
+    <task id="LOCAL-00007" summary="Add CallbackQueryHandler">
       <option name="closed" value="true" />
-      <created>1700825524486</created>
+      <created>1699187179831</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1700825524486</updated>
+      <updated>1699187179831</updated>
     </task>
-    <task id="LOCAL-00008" summary="ResourceManager, Response, Request">
+    <task id="LOCAL-00008" summary="FilesStorage">
       <option name="closed" value="true" />
-      <created>1700828550437</created>
+      <created>1701022654989</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1700828550437</updated>
+      <updated>1701022654989</updated>
     </task>
     <task id="LOCAL-00009" summary="fix">
       <option name="closed" value="true" />
-      <created>1700901978336</created>
+      <created>1701202277102</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1700901978336</updated>
+      <updated>1701202277102</updated>
     </task>
-    <task id="LOCAL-00010" summary="Equip, Spell">
+    <task id="LOCAL-00010" summary="fix">
       <option name="closed" value="true" />
-      <created>1700936606685</created>
+      <created>1701202376403</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1700936606685</updated>
+      <updated>1701202376403</updated>
     </task>
-    <task id="LOCAL-00011" summary="Attack">
+    <task id="LOCAL-00011" summary="GameDispatcher, Consumable, LevelManager, State">
       <option name="closed" value="true" />
-      <created>1700991338821</created>
+      <created>1702438002555</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1700991338821</updated>
+      <updated>1702438002555</updated>
     </task>
-    <task id="LOCAL-00012" summary="Equip, Spell, Attack">
-      <option name="closed" value="true" />
-      <created>1700991698626</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1700991698626</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Attack">
-      <option name="closed" value="true" />
-      <created>1700997008517</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1700997008517</updated>
-    </task>
-    <task id="LOCAL-00014" summary="ConsoleWork">
-      <option name="closed" value="true" />
-      <created>1700998166992</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1700998166992</updated>
-    </task>
-    <task id="LOCAL-00015" summary="fix">
-      <option name="closed" value="true" />
-      <created>1701196882108</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1701196882108</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Level Manager">
-      <option name="closed" value="true" />
-      <created>1701707615106</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1701707615107</updated>
-    </task>
-    <option name="localTasksCounter" value="17" />
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/develop" />
+                  <option value="develop" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -219,7 +288,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/cl_game_processor" />
+                        <option value="develop" />
                       </list>
                     </value>
                   </entry>
@@ -232,21 +301,17 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="GameProcessor::bag" />
-    <MESSAGE value="fix Equipment::equip/unequip" />
-    <MESSAGE value="ResourceManager, Resource" />
-    <MESSAGE value="Request, Response" />
-    <MESSAGE value="GameProcessor::handleRequest, Response::builder" />
-    <MESSAGE value="Global changes" />
-    <MESSAGE value="Fix" />
-    <MESSAGE value="ResourceManager, Response, Request" />
-    <MESSAGE value="Equip, Spell" />
-    <MESSAGE value="Equip, Spell, Attack" />
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="added bot object" />
+    <MESSAGE value="changed Bot using Thread, DefaultChat can used in threads" />
+    <MESSAGE value="TelegramLongPollingBot, Dispatcher, Storage, Main" />
+    <MESSAGE value="Start handlers" />
+    <MESSAGE value="Add CallbackQueryHandler" />
     <MESSAGE value="Attack" />
-    <MESSAGE value="ConsoleWork" />
+    <MESSAGE value="FilesStorage" />
     <MESSAGE value="fix" />
-    <MESSAGE value="Level Manager" />
-    <option name="LAST_COMMIT_MESSAGE" value="Level Manager" />
+    <MESSAGE value="GameDispatcher, Consumable, LevelManager, State" />
+    <option name="LAST_COMMIT_MESSAGE" value="GameDispatcher, Consumable, LevelManager, State" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

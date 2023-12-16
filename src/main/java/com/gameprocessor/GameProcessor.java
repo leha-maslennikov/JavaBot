@@ -75,6 +75,7 @@ public class GameProcessor {
                 case "/help" -> help(request);
                 case "/await" -> await(request);
                 case "/attack" -> attack(request);
+                case "/skills" -> skills(request);
                 default -> {
                     String[] args = request.getCallbackData().split(":");
                     if(args.length < 3) return new Response();
@@ -95,6 +96,8 @@ public class GameProcessor {
                         case "use" -> use(request,resource);
                         case "raiseHp" -> raiseHp(request);
                         case "raiseAp" -> raiseAp(request);
+                        case "forceAttack" -> forceAttack(request);
+                        case "areaAttack" -> areaAttack(request);
                         default -> request.response = new Response();
                     }
                 }
@@ -165,7 +168,8 @@ public class GameProcessor {
                         request.getUserId(),
                         new Creature("player",10,1,0),
                         room,
-                        new LevelManager()
+                        new LevelManager(),
+                        new SkillManager()
                 )
         );
     }
@@ -293,6 +297,7 @@ public class GameProcessor {
         LevelManager levelManager = (LevelManager) userData.getLevelManager().get();
         StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
                 .append(player.attack(creature)).append(" урона");
+        player.setBonusAp(0);
         if(creature.getHp()==0)
         {
             builder.append("\n").append(creature.getName()).append(" повержен");
@@ -313,9 +318,7 @@ public class GameProcessor {
         {
             levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
             levelManager.setLevel(levelManager.getLevel() + 1);
-            LinkedList<Resource> listLevelManager = new LinkedList<>();
-            listLevelManager.add(userData.getLevelManager());
-            send(request,"Новый уровень!", listLevelManager);
+            send(request,userData.levelManager);
         }
     }
     private void await(Request request)
@@ -381,5 +384,61 @@ public class GameProcessor {
         userData.getPlayer().update(player);
         resource.update(consumable);
         send(request, "Вы использовали " + consumable.name);
+    }
+    private void skills(Request request)
+    {
+        UserData userData = (UserData) request.getUserData().get();
+        send(request,userData.skillManager);
+    }
+    private void forceAttack(Request request)
+    {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        player.setBonusAp(player.getAp());
+        userData.getPlayer().update(player);
+        attack(request);
+    }
+    private void areaAttack(Request request)
+    {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        Room room = (Room) userData.getRoom().get();
+        LevelManager levelManager = (LevelManager) userData.getLevelManager().get();
+        StringBuilder resBuilder = new StringBuilder();
+        for(int i = 0; i < room.getEnemies().size(); i++ )
+        {
+            Resource resource = room.getEnemies().get(i);
+            Creature creature = (Creature) resource.get();
+            StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
+                    .append(player.attack(creature)).append(" урона\n");
+            player.setBonusAp(0);
+            if(creature.getHp()==0)
+            {
+                builder.append(creature.getName()).append(" повержен\n");
+                i--;
+                levelManager.setExp(levelManager.getExp() + creature.getExp());
+                room.getEnemies().remove(resource);
+                resource.delete();
+            }
+            userData.getRoom().update(room);
+            request.getUserData().update(userData);
+            if(creature.getHp()>0) resource.update(creature);
+            resBuilder.append(builder);
+
+
+
+        }
+        await(request);
+        if(room.getEnemies().isEmpty()){
+            userData.combatFlag=false;
+            resBuilder.append("\nВсе враги побеждены");
+        }
+        send(request,resBuilder.append("\n").append(request.response.text).toString());
+        if (levelManager.getExp()>=levelManager.getNextLevel())
+        {
+            levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
+            levelManager.setLevel(levelManager.getLevel() + 1);
+            send(request,userData.levelManager);
+        }
     }
 }

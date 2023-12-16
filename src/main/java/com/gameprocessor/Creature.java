@@ -8,6 +8,7 @@ public class Creature {
     public Integer maxHp;
     public Integer ap;
     public Integer exp;
+    public Integer bonusAp;
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
 
@@ -21,6 +22,7 @@ public class Creature {
         this.hp = hp;
         this.ap = ap;
         this.exp = exp;
+        bonusAp = 0;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
     }
@@ -36,6 +38,11 @@ public class Creature {
     public Integer getHp() {
         return hp;
     }
+
+    public Integer getBonusAp() {
+        return bonusAp;
+    }
+
     public Integer getMaxHp(){return maxHp;}
 
     public LinkedList<Resource> getInventory() {
@@ -64,12 +71,16 @@ public class Creature {
         this.ap = ap;
     }
 
+    public void setBonusAp(Integer bonusAp) {
+        this.bonusAp = bonusAp;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public int attack(Creature creature) {
-        return creature.reciveDamage(ap);
+        return (creature.reciveDamage(ap + bonusAp));
     }
 
     public int reciveDamage(int ap) {

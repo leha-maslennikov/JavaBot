@@ -47,7 +47,10 @@ public class LevelManager implements Sendable{
 
     @Override
     public String getLongText() {
-        return "Выберите улучшение:";
+        return """
+                    Новый уровень!
+                    Выберите улучшение:
+                    """;
     }
 
 
