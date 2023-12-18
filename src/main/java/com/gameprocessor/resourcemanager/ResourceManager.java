@@ -1,4 +1,4 @@
-package com.gameprocessor;
+package com.gameprocessor.resourcemanager;
 
 public class ResourceManager {
     public static Storage storage = new DefaultStorage();
@@ -28,5 +28,9 @@ public class ResourceManager {
 
     public static void deleteUser(String userId) {
         storage.deleteUser(userId);
+    }
+
+    public static boolean hasUser(String userId) {
+        return storage.hasUser(userId);
     }
 }

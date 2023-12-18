@@ -1,4 +1,9 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
+
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.items.Item;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,17 +30,6 @@ public class Room {
         return items;
     }
     public List<Resource> getEnemies(){return enemies;}
-//    public void deleteEnemy()
-//    {
-//        for(int i=0;i<enemies.size();i++)
-//        {
-//            if(enemies.get(i).get().getHp()==0)
-//            {
-//                enemies.remove(i);
-//                i--;
-//            }
-//        }
-//    }
 
     public static RoomBuilder builder(String name){
         return new RoomBuilder(name);
@@ -83,7 +77,8 @@ public class Room {
         {
             if(this.userId != null) {
                 for (Item item : items) {
-                    this.room.getEnemies().add(ResourceManager.createResource(this.userId, item));
+                    Resource resource = ResourceManager.createResource(this.userId, item);
+                    this.room.getItems().add(resource);
                 }
             }
             return this;

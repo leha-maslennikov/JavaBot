@@ -1,8 +1,8 @@
 package com.main;
 
 import com.gameprocessor.GameProcessor;
-import com.gameprocessor.Request;
-import com.gameprocessor.Response;
+import com.gameprocessor.user.Request;
+import com.gameprocessor.user.Response;
 
 import java.util.LinkedList;
 import java.util.Scanner;

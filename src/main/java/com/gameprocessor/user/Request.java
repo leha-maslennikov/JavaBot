@@ -1,4 +1,6 @@
-package com.gameprocessor;
+package com.gameprocessor.user;
+
+import com.gameprocessor.resourcemanager.Resource;
 
 public class Request {
     public String userId;

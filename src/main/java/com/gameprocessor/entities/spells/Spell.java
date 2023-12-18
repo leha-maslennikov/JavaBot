@@ -1,34 +1,31 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.spells;
 
-public class Door extends Item {
-    public Resource room;
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.entities.items.Sendable;
 
-    public Door(){
+public class Spell implements Sendable {
+    public int ap;
 
-    }
-    public Door(String name, String description, Room room, String userId){
-        super(name, description);
-        this.room = ResourceManager.createResource(userId, room);
-    }
+    public Spell(){}
 
-    public Resource getRoom() {
-        return room;
+    public Spell(int ap) {
+        this.ap = ap;
     }
 
     /**
      * @return текст, который будет отправлен пользователю вместе с объектом
      */
     @Override
-    public String getShortText() {
-        return this.name;
+    public String getName() {
+        return null;
     }
 
     /**
      * @return текст, который будет отправлен пользователю, после того, как он выберет данный объект
      */
     @Override
-    public String getLongText() {
-        return description;
+    public String getDescription() {
+        return null;
     }
 
     /**
@@ -36,8 +33,6 @@ public class Door extends Item {
      */
     @Override
     public Actions getActions() {
-        return Actions.builder()
-                .addAction("open")
-                .build();
+        return null;
     }
 }

@@ -1,13 +1,13 @@
-package com.gameprocessor;
+package com.gameprocessor.entities;
 
-public class LevelManager implements Sendable{
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.entities.items.Sendable;
+
+public class LevelManager implements Sendable {
 
     public Integer exp;
     public Integer level;
     public Integer nextLevel;
-
-
-
 
     public LevelManager() {
         this.exp = 0;
@@ -41,16 +41,13 @@ public class LevelManager implements Sendable{
     }
 
     @Override
-    public String getShortText() {
+    public String getName() {
         return "Далее";
     }
 
     @Override
-    public String getLongText() {
-        return """
-                    Новый уровень!
-                    Выберите улучшение:
-                    """;
+    public String getDescription() {
+        return "Новый уровень! Выберите улучшение:";
     }
 
 

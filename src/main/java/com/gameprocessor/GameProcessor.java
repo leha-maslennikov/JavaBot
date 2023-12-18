@@ -1,5 +1,22 @@
 package com.gameprocessor;
 
+import com.gameprocessor.dispatcher.Dispatcher;
+import com.gameprocessor.dispatcher.filters.And;
+import com.gameprocessor.dispatcher.filters.Command;
+import com.gameprocessor.dispatcher.filters.Or;
+import com.gameprocessor.dispatcher.filters.State;
+import com.gameprocessor.dispatcher.handlers.Handler;
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.creatures.Dwarf;
+import com.gameprocessor.entities.creatures.Human;
+import com.gameprocessor.entities.items.*;
+import com.gameprocessor.resourcemanager.Resource;
+import com.gameprocessor.resourcemanager.ResourceManager;
+import com.gameprocessor.entities.*;
+import com.gameprocessor.user.Request;
+import com.gameprocessor.user.Response;
+import com.gameprocessor.user.UserData;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +33,10 @@ import java.util.List;
  *      которой совершается с этим объектом
  */
 public class GameProcessor {
+    public static final String NONE = "";
+    public static final String COMBAT = "COMBAT";
+    public static final String CREATE = "CREATE";
+    public static final Creature[] RACES = new Creature[]{new Dwarf(), new Human()};
 
     /**
      * Отправляет текстовое сообщение пользователю
@@ -30,7 +51,7 @@ public class GameProcessor {
     }
 
     /**
-     * Отправляет объекты пользователю, с текстом из getShortText
+     * Отправляет объекты пользователю, с текстом из getName
      * @param request запрос, на который готовится response
      * @param text текст, для пользователя
      * @param resources объекты для отправки, должны быть Sendable
@@ -41,7 +62,7 @@ public class GameProcessor {
                 .text(text);
         for(Resource resource: resources){
             if(resource.get() instanceof Sendable obj) {
-                response.addObject(obj.getShortText(), resource.id);
+                response.addObject(obj.getName(), resource.getId());
             }
         }
         request.response = response.build();
@@ -56,112 +77,232 @@ public class GameProcessor {
         if(resource.get() instanceof Sendable obj){
             var response = Response.builder()
                     .userId(request.getUserId())
-                    .text(obj.getLongText());
+                    .text(obj.getDescription());
             for(String action: obj.getActions().getActions()){
-                response.addObject(action, resource.id+":"+action);
+                response.addObject(action, resource.getId()+":"+action);
             }
             request.response = response.build();
         }
     }
 
-    public Response handleRequest(Request request) {
-        try {
-            switch (request.getCallbackData()) {
-                case "/start" -> start(request);
-                case "/inspect" -> inspect(request);
-                case "/data" -> data(request);
-                case "/bag" -> bag(request);
-                case "/retry" -> retry(request);
-                case "/help" -> help(request);
-                case "/await" -> await(request);
-                case "/attack" -> attack(request);
-                case "/skills" -> skills(request);
-                default -> {
-                    String[] args = request.getCallbackData().split(":");
-                    if(args.length < 3) return new Response();
-                    Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
-                    if (resource.get() instanceof Creature creature) {
-                        attack(request, resource);
-                        return request.response;
-                    }
-                    if (args.length < 4) {
-                        send(request, resource);
-                        return request.response;
-                    }
-                    switch (args[3]) {
-                        case "loot" -> loot(request, resource);
-                        case "equip" -> equip(request, resource);
-                        case "unequip" -> unequip(request, resource);
-                        case "open" -> open(request, resource);
-                        case "use" -> use(request,resource);
-                        case "raiseHp" -> raiseHp(request);
-                        case "raiseAp" -> raiseAp(request);
-                        case "forceAttack" -> forceAttack(request);
-                        case "areaAttack" -> areaAttack(request);
-                        case "heal" -> heal(request);
-                        default -> request.response = new Response();
-                    }
-                }
-            }
-            return request.response;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new Response();
-        }
+    public Response handleRequest(Request r) {
+        Dispatcher dp = GameDispatcher.get();
+        dp.addHandler(
+                new Handler(
+                        new Command("start"),
+                        request -> {
+                            start(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Command("data"),
+                        request -> {
+                            data(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Or(
+                                new Command("retry"),
+                                new Command("Y")
+                        ),
+                        request -> {
+                            retry(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Command("help"),
+                        request -> {
+                            help(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new Command("N"),
+                        request -> {
+                            request.response = Response.builder().userId(request.getUserId()).text("Действие отменено").build();
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(COMBAT),
+                                new Command("await")
+                        ),
+                        request -> {
+                            await(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(COMBAT),
+                                new Command("attack")
+                        ),
+                        request -> {
+                            attack(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(COMBAT),
+                                new Command("skills")
+                        ),
+                        request -> {
+                            skills(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(NONE),
+                                new Command("inspect")
+                        ),
+                        request -> {
+                            inspect(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        new And(
+                                new State(NONE),
+                                new Command("bag")
+                        ),
+                        request -> {
+                            bag(request);
+                        }
+                )
+        );
+        dp.addHandler(
+                new Handler(
+                        request -> true,
+                        request -> {
+                            try {
+                                    String[] args = request.getCallbackData().split(":");
+                                    if(args.length < 3) return;
+                                    Resource resource = new Resource(args[0] + ":" + args[1] + ":" + args[2]);
+                                    if (resource.get() instanceof Creature creature) {
+                                        attack(request, resource);
+                                        return;
+                                    }
+                                    if (args.length < 4) {
+                                        send(request, resource);
+                                        return;
+                                    }
+                                    switch (args[3]) {
+                                        case "loot" -> loot(request, resource);
+                                        case "equip" -> equip(request, resource);
+                                        case "unequip" -> unequip(request, resource);
+                                        case "open" -> open(request, resource);
+                                        case "use" -> use(request,resource);
+                                        case "raiseHp" -> raiseHp(request);
+                                        case "raiseAp" -> raiseAp(request);
+                                        case "forceAttack" -> forceAttack(request);
+                                        case "areaAttack" -> areaAttack(request);
+                                        case "heal" -> heal(request);
+                                        default -> request.response = Response.builder().build();
+                                }
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                                request.response = Response.builder().build();
+                            }
+                        }
+                )
+        );
+        dp.call(r);
+        return r.response;
     }
-    private List<Room> generateFloor(int numberOfRooms,  List<List<Item>> items, List<List<Creature>> enemies){
-        List<Room> rooms = new LinkedList<>();
+    private Room generateFloor(int numberOfRooms, List<List<Item>> items, List<List<Creature>> enemies, Request request) {
+        List<Room.RoomBuilder> rooms = new LinkedList<>();
         List<List<Item>> randomItems= new LinkedList<>();
         List<List<Creature>> randomEnemies=new LinkedList<>();
-        for(int i=0;i<items.size();i++)
+        List<List<Integer>>doorsId=new LinkedList<>();
+        while(!items.isEmpty())
         {
-            int randomNumber=((int)(Math.random()*(items.size()-i)));
+            int randomNumber=((int)(Math.random()*(items.size())));
             randomItems.add(items.get(randomNumber));
             items.remove(randomNumber);
         }
-        for(int i=0;i<enemies.size();i++)
+        while(!enemies.isEmpty())
         {
-            int randomNumber=((int)(Math.random()*(enemies.size()-i)));
+            int randomNumber=((int)(Math.random()*(enemies.size())));
             randomEnemies.add(enemies.get(randomNumber));
             enemies.remove(randomNumber);
         }
-        rooms.add(Room.builder("Room "+1)
-                .addItems(randomItems.get(1)).build());
-        for(int i=1;i<numberOfRooms;i++)
+
+        doorsId.add(new LinkedList<>());
+        for (int i=1;i<numberOfRooms;i++)
         {
-            rooms.add(Room.builder("Room "+i)
+            doorsId.add(new LinkedList<>());
+            int randomRoom=((int)(Math.random()*i));
+            doorsId.get(i).add(randomRoom);
+            //doorsId.get(randomRoom).add(i);
+        }
+
+        for(int i=0;i<numberOfRooms;i++)
+        {
+            rooms.add(
+                    Room.builder("Room "+(i+1))
+                    .userId(request.getUserId())
                     .addItems(randomItems.get(i))
-                    .addEnemies(randomEnemies.get(i)).build());
+                    .addEnemies(randomEnemies.get(i))
+            );
+        }
+
+        int k = 1;
+        for(int i = numberOfRooms-1; i >= 0; i--) {
+            Room room = rooms.get(i).build();
+            for(int j: doorsId.get(i)) {
+                rooms.get(j).addItem(
+                        new Door("Door " + k++, "Door to " + room.getName(), room, request.getUserId())
+                );
+            }
+        }
+
+        return rooms.get(0).build();
+    }
+
+    private void createUser(Request request){
+        List<List<Item>>items=new LinkedList<>();
+        List<List<Creature>>enemies=new LinkedList<>();
+
+        for(int i=0;i<5;i++)
+        {
+            items.add(new LinkedList<>());
+            enemies.add(new LinkedList<>());
 
         }
-        return rooms;
-    }
-    private void createUser(Request request){
-        Room room = Room.builder("Room 1")
+        items.get(0).add( Box.builder("Chest", "Old chest")
                 .userId(request.getUserId())
-                .addItem(new Item("Sth", "Rubish"))
-                .addItem(
-                        Box.builder("Chest", "Old chest")
-                                .userId(request.getUserId())
-                                .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
-                                .addItem(new Equipment("Шлем", "Металлический шлем", 10, 1))
-                                .addItem(new Consumable("Зелье здоровья","Пополняет здововье на 10",10))
-                                .build()
-                )
-                .addItem(
-                        new Door(
-                                "Door",
-                                "Door to Room 2",
-                                Room.builder("Room 2")
-                                        .userId(request.getUserId())
-                                        .addEnemy(new Creature("bat",3,1,5,0))
-                                        .addEnemy(new Creature("spider", 3, 1,5,0))
-                                        .build(),
-                                request.getUserId()
-                        )
-                )
-                .build();
+                .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
+                .build());
+        items.get(1).add( Box.builder("Chest", "Old chest")
+                .userId(request.getUserId())
+                .addItem(new Equipment("Шлем", "Металлический шлем", 5, 1))
+                .build());
+        items.get(2).add(Box.builder("Chest", "Old chest")
+                .userId(request.getUserId())
+                .addItem(new Equipment("armor", "Iron armor", 10, 1))
+                .build());
+        enemies.get(0).add(new Creature("bat",3,1, 5,0));
+        enemies.get(1).add((new Creature("spider", 3, 1, 5,0)));
+        enemies.get(2).add(new Creature("slime",5,1, 5,0));
+
+        Room room=generateFloor(5,items,enemies,request);
+
         Resource resource = ResourceManager.createResource(
                 request.getUserId(),
                 "UserData",
@@ -174,19 +315,102 @@ public class GameProcessor {
                 )
         );
     }
-    private void start(Request request){
+
+    private void createUserForShow(Request request) {
+        var room = Room.builder("Room 1").userId(request.getUserId())
+                .addItem(
+                        Box.builder("Chest", "Old chest")
+                                .userId(request.getUserId())
+                                .addItem(new Consumable("Hp potion", "Regen 5 hp", 5))
+                                .addItem(new Equipment("Weapon", "Bad weapon", 0, 2))
+                                .build()
+                )
+                .addItem(
+                        Box.builder("Some Chest", "Chest")
+                                .userId(request.getUserId())
+                                .addItem(new Equipment("Шлем", "Металлический шлем", 5, 1))
+                                .build()
+                )
+                .addItem(
+                        new Door("Door",
+                                "Door to room 2",
+                                Room.builder("Room 2")
+                                .userId(request.getUserId())
+                                .addItem(
+                                        new Door("Door",
+                                                "Door to room 3",
+                                                Room.builder("Room 3")
+                                                        .userId(request.getUserId())
+                                                        .addEnemy(new Creature("slime",5,1, 5,0))
+                                                        .build(),
+                                                request.getUserId()
+                                        )
+                                )
+                                .addEnemy(new Creature("bat",3,1, 5,0))
+                                .addEnemy(new Creature("spider", 3, 1, 5,0))
+                                .addItem(
+                                        Box.builder("Chest", "Chest")
+                                                .userId(request.getUserId())
+                                                .addItem(new Consumable("Hp potion", "Regen 5 hp", 5))
+                                                .addItem(new Equipment("Boots", "Just boots", 1, 0))
+                                                .build()
+                                )
+                                .build(),
+                                request.getUserId()
+                        )
+                )
+                .build();
+
+        Resource resource = ResourceManager.createResource(
+                request.getUserId(),
+                "UserData",
+                new UserData(
+                        request.getUserId(),
+                        new Creature("player",10,1,0,20),
+                        room,
+                        new LevelManager(),
+                        new SkillManager()
+                )
+        );
+    }
+
+    private void start(Request request) {
+        if(ResourceManager.hasUser(request.getUserId())) {
+            var response = Response.builder()
+                    .userId(request.getUserId())
+                    .text("Игра запущена. Хотите начать заново?");
+            response.addObject("Да", "/retry");
+            response.addObject("Нет", "/N");
+            request.response = response.build();
+            return;
+        }
         send(request,
                 """
                 Добро пожаловать в нашу текстовую РПГ
                 Ваша задача: выбраться из подземелья
-                /inspect - осмотреть окружение
-                /data - посмотреть информацию о персонаже
-                /bag - открыть инвентарь
-                /retry - начать заново
-                /help - помощь
                 """);
-        createUser(request);
+        create(request);
+
     }
+
+    private void create(Request request) {
+        if(ResourceManager.hasUser(request.getUserId())) {
+            start(request);
+            return;
+        }
+        createUserForShow(request);
+        UserData userData = (UserData) request.getUserData().get();
+        userData.state = CREATE;
+        request.getUserData().update(userData);
+        var response = Response.builder().userId(request.getUserId());
+        StringBuilder text = new StringBuilder(request.response.text).append("\nВыберете расу:");
+        for(Creature i: RACES) {
+            text.append("\n").append(i.getInfo());
+            response.addObject(i.getClass().getSimpleName(), i.getClass().getSimpleName());
+        }
+        request.response = response.text(text.toString()).build();
+    }
+
 
     private void inspect(Request request){
         UserData userData = (UserData) request.getUserData().get();
@@ -198,14 +422,15 @@ public class GameProcessor {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         LevelManager levelManager =  (LevelManager) userData.getLevelManager().get();
+        SkillManager skillManager = (SkillManager) userData.getSkillManager().get();
         send(request,"Name: " + player.getName() +
+                "\nРаса: " + player.getClass().getSimpleName() +
                 "\nHp: " + player.getHp()  + "/" + player.getMaxHp() +
                 "\nAp: " + player.getAp() +
                 "\nExp: " + levelManager.getExp() +
                 "\nLevel: " + levelManager.getLevel() +
                 "\nNext level: " + levelManager.getNextLevel() +
-                "\nMp: " + player.getMp() +
-                "\nЭкипировано:", player.getEquipment()
+                "\nЭкипировано:",player.getEquipment()
         );
     }
 
@@ -243,11 +468,11 @@ public class GameProcessor {
         StringBuilder builder = new StringBuilder("Вы получили:\n");
         for(Resource i: box.getItems()){
             Item item = (Item) i.get();
-            builder.append(item.getShortText());
+            builder.append(item.getName());
             builder.append("\n");
             player.getInventory().add(i);
         }
-        resource.update(new Box(box.getShortText(), "Пусто"));
+        resource.update(Box.builder(box.getName(), "Пусто").build());
         userData.getPlayer().update(player);
         send(request, builder.toString());
     }
@@ -258,10 +483,10 @@ public class GameProcessor {
         Equipment equipment = (Equipment) resource.get();
         if(equipment.equip(player, resource)) {
             player.getInventory().remove(resource);
-            send(request, "Вы надели " + equipment.getShortText());
+            send(request, "Вы надели " + equipment.getName());
             userData.getPlayer().update(player);
         }
-        else send(request, "У вас не получилось надеть " + equipment.getShortText());
+        else send(request, "У вас не получилось надеть " + equipment.getName());
         resource.update(equipment);
     }
 
@@ -271,11 +496,11 @@ public class GameProcessor {
         Equipment equipment = (Equipment) resource.get();
         if(equipment.unequip(player, resource)) {
             player.getInventory().add(resource);
-            send(request, "Вы сняли " + equipment.getShortText() + " и положили в инвентарь");
+            send(request, "Вы сняли " + equipment.getName() + " и положили в инвентарь");
             userData.getPlayer().update(player);
         }
         else {
-            send(request, "У вас не получилось снять " + equipment.getShortText());
+            send(request, "У вас не получилось снять " + equipment.getName());
         }
         resource.update(equipment);
     }
@@ -290,8 +515,8 @@ public class GameProcessor {
         }
         request.response = response.build();
     }
-    private void attack(Request request, Resource resource)
-    {
+
+    private void attack(Request request, Resource resource) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Room room = (Room) userData.getRoom().get();
@@ -306,9 +531,10 @@ public class GameProcessor {
             levelManager.setExp(levelManager.getExp() + creature.getExp());
             room.getEnemies().remove(resource);
             resource.delete();
+            userData.getLevelManager().update(levelManager);
         }
         if(room.getEnemies().isEmpty()){
-            userData.combatFlag=false;
+            userData.state=NONE;
             builder.append("\nВсе враги побеждены");
         }
         userData.getRoom().update(room);
@@ -318,13 +544,16 @@ public class GameProcessor {
         send(request, builder.append("\n").append(request.response.text).toString());
         if (levelManager.getExp()>=levelManager.getNextLevel())
         {
+            SkillManager skillManager = (SkillManager) userData.getSkillManager().get();
+            skillManager.setLevel(skillManager.getLevel() + 1);
             levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
             levelManager.setLevel(levelManager.getLevel() + 1);
-            send(request,userData.levelManager);
+            userData.getLevelManager().update(levelManager);
+            send(request, userData.getLevelManager());
         }
     }
-    private void await(Request request)
-    {
+
+    private void await(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
         Room room = (Room) userData.getRoom().get();
@@ -351,15 +580,16 @@ public class GameProcessor {
         userData.getRoom().update(room);
         StringBuilder builder = new StringBuilder("Вы вошли в ").append(room.getName());
         if(!room.getEnemies().isEmpty()) {
-            userData.combatFlag = true;
+            userData.state = COMBAT;
             request.getUserData().update(userData);
             await(request);
             builder.append("\nНа вас напали.\n").append(request.response.text)
-                    .append("/attack - атаковать\n/await - пропустить ход");
+                    .append("/attack - атаковать\n/await - пропустить ход\n/skills - выбрать умение");
         }
         request.getUserData().update(userData);
         send(request, builder.toString());
     }
+
     private void raiseHp(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
@@ -369,6 +599,7 @@ public class GameProcessor {
         request.getUserData().update(userData);
         send(request,"Здоровье увеличено на 5");
     }
+
     private void raiseAp(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
@@ -377,6 +608,7 @@ public class GameProcessor {
         request.getUserData().update(userData);
         send(request,"Урон увеличен на 1");
     }
+
     private void use(Request request, Resource resource){
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
@@ -402,8 +634,8 @@ public class GameProcessor {
             userData.getPlayer().update(player);
             attack(request);
         }
-       else{
-           send(request,"Не достаточно маны");
+        else{
+            send(request,"Не достаточно маны");
         }
     }
     private void areaAttack(Request request) {

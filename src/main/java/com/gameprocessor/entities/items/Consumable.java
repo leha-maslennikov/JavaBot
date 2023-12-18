@@ -1,8 +1,13 @@
-package com.gameprocessor;
+package com.gameprocessor.entities.items;
+
+import com.gameprocessor.entities.Actions;
+import com.gameprocessor.entities.creatures.Creature;
+import com.gameprocessor.entities.items.Item;
 
 public class Consumable extends Item {
     public Integer hp;
 
+    public Consumable(){}
     public Consumable(String name, String description, int hp) {
         super(name, description);
         this.hp = hp;
