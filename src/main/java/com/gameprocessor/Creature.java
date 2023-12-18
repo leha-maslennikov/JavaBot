@@ -8,6 +8,7 @@ public class Creature {
     public Integer maxHp;
     public Integer ap;
     public Integer exp;
+    public Integer mp;
     public Integer bonusAp;
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
@@ -16,12 +17,13 @@ public class Creature {
 
     }
 
-    public Creature(String name, int hp, int ap,int exp) {
+    public Creature(String name, int hp, int ap,int exp, int mp) {
         this.name = name;
         this.maxHp = hp;
         this.hp = hp;
         this.ap = ap;
         this.exp = exp;
+        this.mp = mp;
         bonusAp = 0;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
@@ -38,6 +40,7 @@ public class Creature {
     public Integer getHp() {
         return hp;
     }
+    public Integer getMp(){return mp;}
 
     public Integer getBonusAp() {
         return bonusAp;
@@ -64,6 +67,13 @@ public class Creature {
         {
             this.hp = this.maxHp;
         }
+    }
+
+    public void setExp(Integer exp) {
+        this.exp = exp;
+    }
+    public void setMp(Integer mp) {
+        this.mp = mp;
     }
     public void setMaxHp(Integer maxHp){this.maxHp = maxHp;}
 

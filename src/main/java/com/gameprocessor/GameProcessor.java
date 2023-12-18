@@ -98,6 +98,7 @@ public class GameProcessor {
                         case "raiseAp" -> raiseAp(request);
                         case "forceAttack" -> forceAttack(request);
                         case "areaAttack" -> areaAttack(request);
+                        case "heal" -> heal(request);
                         default -> request.response = new Response();
                     }
                 }
@@ -154,8 +155,8 @@ public class GameProcessor {
                                 "Door to Room 2",
                                 Room.builder("Room 2")
                                         .userId(request.getUserId())
-                                        .addEnemy(new Creature("bat",3,1,5))
-                                        .addEnemy(new Creature("spider", 3, 1,5))
+                                        .addEnemy(new Creature("bat",3,1,5,0))
+                                        .addEnemy(new Creature("spider", 3, 1,5,0))
                                         .build(),
                                 request.getUserId()
                         )
@@ -166,7 +167,7 @@ public class GameProcessor {
                 "UserData",
                 new UserData(
                         request.getUserId(),
-                        new Creature("player",10,1,0),
+                        new Creature("player",10,1,0,20),
                         room,
                         new LevelManager(),
                         new SkillManager()
@@ -203,6 +204,7 @@ public class GameProcessor {
                 "\nExp: " + levelManager.getExp() +
                 "\nLevel: " + levelManager.getLevel() +
                 "\nNext level: " + levelManager.getNextLevel() +
+                "\nMp: " + player.getMp() +
                 "\nЭкипировано:", player.getEquipment()
         );
     }
@@ -394,51 +396,72 @@ public class GameProcessor {
     {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
-        player.setBonusAp(player.getAp());
-        userData.getPlayer().update(player);
-        attack(request);
+        if (player.getMp() >= 10){
+            player.setBonusAp(player.getAp());
+            player.setMp(player.getMp() - 10);
+            userData.getPlayer().update(player);
+            attack(request);
+        }
+       else{
+           send(request,"Не достаточно маны");
+        }
     }
-    private void areaAttack(Request request)
-    {
+    private void areaAttack(Request request) {
         UserData userData = (UserData) request.getUserData().get();
         Creature player = (Creature) userData.getPlayer().get();
-        Room room = (Room) userData.getRoom().get();
-        LevelManager levelManager = (LevelManager) userData.getLevelManager().get();
-        StringBuilder resBuilder = new StringBuilder();
-        for(int i = 0; i < room.getEnemies().size(); i++ )
-        {
-            Resource resource = room.getEnemies().get(i);
-            Creature creature = (Creature) resource.get();
-            StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
-                    .append(player.attack(creature)).append(" урона\n");
-            player.setBonusAp(0);
-            if(creature.getHp()==0)
-            {
-                builder.append(creature.getName()).append(" повержен\n");
-                i--;
-                levelManager.setExp(levelManager.getExp() + creature.getExp());
-                room.getEnemies().remove(resource);
-                resource.delete();
+        if (player.getMp() >= 10) {
+            player.setMp(player.getMp() - 10);
+            Room room = (Room) userData.getRoom().get();
+            LevelManager levelManager = (LevelManager) userData.getLevelManager().get();
+            StringBuilder resBuilder = new StringBuilder();
+            for (int i = 0; i < room.getEnemies().size(); i++) {
+                Resource resource = room.getEnemies().get(i);
+                Creature creature = (Creature) resource.get();
+                StringBuilder builder = new StringBuilder("Вы наносите ").append(creature.getName()).append(" ")
+                        .append(player.attack(creature)).append(" урона\n");
+                player.setBonusAp(0);
+                if (creature.getHp() == 0) {
+                    builder.append(creature.getName()).append(" повержен\n");
+                    i--;
+                    levelManager.setExp(levelManager.getExp() + creature.getExp());
+                    room.getEnemies().remove(resource);
+                    resource.delete();
+                }
+                userData.getRoom().update(room);
+                request.getUserData().update(userData);
+                if (creature.getHp() > 0) resource.update(creature);
+                resBuilder.append(builder);
+
+
             }
-            userData.getRoom().update(room);
-            request.getUserData().update(userData);
-            if(creature.getHp()>0) resource.update(creature);
-            resBuilder.append(builder);
-
-
-
+            await(request);
+            if (room.getEnemies().isEmpty()) {
+                userData.combatFlag = false;
+                resBuilder.append("\nВсе враги побеждены");
+            }
+            send(request, resBuilder.append("\n").append(request.response.text).toString());
+            if (levelManager.getExp() >= levelManager.getNextLevel()) {
+                levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
+                levelManager.setLevel(levelManager.getLevel() + 1);
+                send(request, userData.levelManager);
+            }
         }
-        await(request);
-        if(room.getEnemies().isEmpty()){
-            userData.combatFlag=false;
-            resBuilder.append("\nВсе враги побеждены");
+        else{
+            send(request,"Не достаточно маны");
         }
-        send(request,resBuilder.append("\n").append(request.response.text).toString());
-        if (levelManager.getExp()>=levelManager.getNextLevel())
+    }
+    private void heal(Request request) {
+        UserData userData = (UserData) request.getUserData().get();
+        Creature player = (Creature) userData.getPlayer().get();
+        if(player.getMp() >= 10)
         {
-            levelManager.setNextLevel(levelManager.getNextLevel() + levelManager.getLevel() * 10);
-            levelManager.setLevel(levelManager.getLevel() + 1);
-            send(request,userData.levelManager);
+            player.setMp(player.getMp() - 10);
+            player.setHp(player.getHp() + player.getMaxHp()/2);
+            userData.getPlayer().update(player);
+            await(request);
+        }
+        else{
+            send(request,"Не достаточно маны");
         }
     }
 }

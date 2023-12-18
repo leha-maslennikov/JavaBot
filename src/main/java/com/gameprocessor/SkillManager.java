@@ -17,6 +17,7 @@ public class SkillManager implements Sendable {
         return Actions.builder()
                 .addAction("areaAttack")
                 .addAction("forceAttack")
+                .addAction("heal")
                 .build();
     }
 }

@@ -6,6 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="848a91ae-6fb9-4e5f-80ab-0c46180c081e" name="Changes" comment="GameDispatcher, Consumable, LevelManager, State">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/dispatcher/filters/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/dispatcher/filters/State.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Creature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Dwarf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Dwarf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/entities/creatures/Human.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gameprocessor/user/UserData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +45,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="rpg" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -90,7 +97,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "cl__game__processor",
+    "git-widget-placeholder": "develop",
     "last_opened_file_path": "D:/ООП/JavaBot/src/main/java/com/gameprocessor",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -110,7 +117,7 @@
       <recent name="D:\ООП\JavaBot\src\main\java\com\gameprocessor" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.main.Main" />
       <module name="JavaBot.main" />
@@ -152,7 +159,7 @@
         <item itemvalue="Application.Main" />
         <item itemvalue="Gradle.JavaBot [dependencies]" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Gradle.JavaBot [dependencies]" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -316,11 +323,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/gameprocessor/GameProcessor.java</url>
-          <line>315</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalMonitorStateException" package="java.lang" />
+          <option name="timeStamp" value="7" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
