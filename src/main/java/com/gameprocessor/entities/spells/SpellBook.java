@@ -1,20 +1,20 @@
-package com.gameprocessor.entities;
+package com.gameprocessor.entities.spells;
 
+import com.gameprocessor.entities.Actions;
 import com.gameprocessor.entities.items.Sendable;
 
-public class Spell implements Sendable {
-    public int ap;
+import java.util.LinkedList;
 
-    public Spell(int ap) {
-        this.ap = ap;
-    }
+public class SpellBook implements Sendable {
+
+    public LinkedList<Spell> spells;
 
     /**
      * @return текст, который будет отправлен пользователю вместе с объектом
      */
     @Override
     public String getName() {
-        return null;
+        return "Книга заклинаний";
     }
 
     /**
@@ -22,7 +22,7 @@ public class Spell implements Sendable {
      */
     @Override
     public String getDescription() {
-        return null;
+        return "Вы можете применить:";
     }
 
     /**

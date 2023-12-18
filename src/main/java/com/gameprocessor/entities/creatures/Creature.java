@@ -1,5 +1,7 @@
 package com.gameprocessor.entities.creatures;
 
+import com.gameprocessor.entities.spells.Attack;
+import com.gameprocessor.entities.spells.Spell;
 import com.gameprocessor.resourcemanager.Resource;
 
 import java.util.LinkedList;
@@ -13,6 +15,7 @@ public class Creature {
     public int exp;
     public LinkedList<Resource> inventory;
     public LinkedList<Resource> equipment;
+    public LinkedList<Spell> spells;
 
     public Creature() {
         this("player", 10, 1, 0);
@@ -26,6 +29,8 @@ public class Creature {
         this.exp = exp;
         this.inventory = new LinkedList<>();
         this.equipment = new LinkedList<>();
+        this.spells = new LinkedList<>();
+        spells.add(new Attack());
     }
 
     public Creature init() {
@@ -80,13 +85,13 @@ public class Creature {
         this.name = name;
     }
 
-    public int attack(Creature creature) {
-        return creature.reciveDamage(ap);
+    public Spell attack(Creature creature) {
+        return creature.reciveDamage(new Spell(getAp()));
     }
 
-    public int reciveDamage(int ap) {
-        hp -= ap;
+    public Spell reciveDamage(Spell spell) {
+        hp -= spell.ap;
         if(hp < 0) hp = 0;
-        return ap;
+        return spell;
     }
 }
